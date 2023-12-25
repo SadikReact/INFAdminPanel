@@ -20,10 +20,12 @@ class SidebarHeader extends Component {
             <NavLink to="/" className="navbar-brand">
               <div className="">
                 <img
+                  className="logo"
                   src={logo}
                   alt="logo"
-                  width="120px"
-                  style={{ width: "150" }}
+                  height="40px"
+                  width="100px"
+                  style={{ marginLeft: "50px" }}
                 />
               </div>
 

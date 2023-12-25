@@ -66,11 +66,12 @@ export default class EditAgent extends Component {
   };
   submitHandler = (e) => {
     e.preventDefault();
+    debugger;
     let { id } = this.props.match.params;
     axiosConfig
-      .post(`/admin/editEquityScript/${id}`, this.state)
+      .post(`/editAgentProfile/${id}`, this.state)
       .then((response) => {
-        this.setState({ scriptName: "" });
+        // this.setState({ scriptName: "" });
         swal("Success!", "Submitted SuccessFull!", "success");
       })
       .catch((error) => {

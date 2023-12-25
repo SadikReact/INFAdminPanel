@@ -36,7 +36,7 @@ class LoginJWT extends React.Component {
         console.log(res);
         console.log(res.data.token);
         swal("Submittted Successfully");
-        window.location.replace("/dashboard");
+        window.location.replace("/#");
       })
       .catch((err) => {
         console.log(err);
