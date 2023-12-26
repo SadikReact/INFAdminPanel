@@ -7,20 +7,18 @@ import {
   Form,
   Label,
   Input,
-  //   CustomInput,
   Button,
   Breadcrumb,
   BreadcrumbItem,
 } from "reactstrap";
 import axiosConfig from "../../../axiosConfig";
-// import { history } from "../../../history";
+import { history } from "../../../history";
 import { Route } from "react-router-dom";
 import swal from "sweetalert";
 export default class EditAgent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // status: "",
       agentName: "",
       agentCode: "",
       email: "",
@@ -61,17 +59,17 @@ export default class EditAgent extends Component {
   // };
 
   changeHandler = (e) => {
-    console.log(e.target.name, e.target.value);
+    console.log(e.target.value);
     this.setState({ [e.target.name]: e.target.value });
   };
   submitHandler = (e) => {
     e.preventDefault();
     let { id } = this.props.match.params;
     axiosConfig
-      .post(`/admin/editEquityScript/${id}`, this.state)
+      .post(`/admin/editAgentProfile/${id}`, this.state)
       .then((response) => {
-        this.setState({ scriptName: "" });
         swal("Success!", "Submitted SuccessFull!", "success");
+        this.props.history.push("/app/agent/AgentList");
       })
       .catch((error) => {
         console.log(error);

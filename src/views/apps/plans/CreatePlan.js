@@ -19,6 +19,8 @@ import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "../../../assets/scss/plugins/extensions/editor.scss";
+import { history } from "../../../history";
+
 export default class CreatePlan extends Component {
   constructor(props) {
     super(props);
@@ -47,9 +49,9 @@ export default class CreatePlan extends Component {
     axiosConfig
       .post("/user/addInfPlan", this.state)
       .then((response) => {
-        this.setState({ planName: "" });
-        this.setState({ desc: "" });
+        this.setState({ planName: "", desc: "" });
         swal("Success!", "Submitted SuccessFull!", "success");
+        this.props.history.push("/app/plans/CreatedPlanList");
       })
       .catch((error) => {
         console.log(error);

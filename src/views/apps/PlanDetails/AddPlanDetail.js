@@ -97,6 +97,7 @@ export default class CreatePlan extends Component {
       .then((response) => {
         console.log(response.data);
         swal("Success!", "Submitted SuccessFull!", "success");
+        this.props.history.push("/app/plans/PlanDetailList");
       })
       .catch((error) => {
         console.log(error);
@@ -181,14 +182,13 @@ export default class CreatePlan extends Component {
                     className="form-control"
                     type="file"
                     name="upload_pdf"
-                    // value={this.state.upload_pdf}
                     onChange={this.handleImage}
                   />
                 </Col>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label>Plan Max</Label>
                   <Input
-                    type="text"
+                    type="number"
                     name="plan_max"
                     placeholder="Plan Max"
                     value={this.state.plan_max}

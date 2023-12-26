@@ -53,7 +53,7 @@ class CreatedPlanList extends React.Component {
               <Route
                 render={({ history }) => (
                   <Edit
-                    // className="mr-20"
+                    className="mr-50"
                     size="25px"
                     color="blue"
                     onClick={() =>
@@ -63,7 +63,7 @@ class CreatedPlanList extends React.Component {
                 )}
               />
               <Trash2
-                size={20}
+                size={25}
                 color="red"
                 onClick={() => {
                   this.runthisfunction(params.data._id);

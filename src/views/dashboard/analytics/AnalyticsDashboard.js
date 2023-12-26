@@ -88,7 +88,7 @@ class AnalyticsDashboard extends React.Component {
       <React.Fragment>
         <Row className="my-2">
           <Col lg="12" md="12">
-            <h2>Hop Dashboard</h2>
+            <h2>Dashboard</h2>
             {/* <SalesCard /> */}
           </Col>
         </Row>
@@ -102,7 +102,7 @@ class AnalyticsDashboard extends React.Component {
               style={{ borderColor: "white" }}
             >
               <CardTitle className="mb-1" tag="h4" style={{ color: "white" }}>
-                Total Carry forward trade
+                Total Agent
               </CardTitle>
 
               <CardText tag="h3" style={{ color: "white" }}>
@@ -118,7 +118,7 @@ class AnalyticsDashboard extends React.Component {
               style={{ borderColor: "white" }}
             >
               <CardTitle className="mb-1" tag="h4" style={{ color: "white" }}>
-                Total Today Active Trade
+                Total Member
               </CardTitle>
 
               <CardText tag="h3" style={{ color: "white" }}>
@@ -134,7 +134,7 @@ class AnalyticsDashboard extends React.Component {
               style={{ borderColor: "white" }}
             >
               <CardTitle className="mb-1" tag="h4" style={{ color: "white" }}>
-                Total Today Completed Trade
+                Total Plan
               </CardTitle>
 
               <CardText tag="h3" style={{ color: "white" }}>

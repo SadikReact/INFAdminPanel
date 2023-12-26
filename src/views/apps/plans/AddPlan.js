@@ -58,10 +58,10 @@ export default class AddFnoOption extends Component {
                 <BreadcrumbItem href="/analyticsDashboard" tag="a">
                   Home
                 </BreadcrumbItem>
-                <BreadcrumbItem href="/app/scripts/fnoOption" tag="a">
-                  FNO Option List
+                <BreadcrumbItem href="" tag="a">
+                  Plan List
                 </BreadcrumbItem>
-                <BreadcrumbItem active>Add FNO Option</BreadcrumbItem>
+                <BreadcrumbItem active>Add Plan</BreadcrumbItem>
               </Breadcrumb>
             </div>
           </Col>
