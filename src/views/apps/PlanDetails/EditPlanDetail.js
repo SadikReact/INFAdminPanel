@@ -64,49 +64,37 @@ export default class EditPlanDetail extends Component {
 
   async componentDidMount() {
     const { id } = this.props.match.params;
-    await axiosConfig.get(`/admin/getOnePlan/${id}`).then((response) => {
-      const {
-        planname,
-        title,
-        short_desc,
-        coverageAmt,
-        coverage_area,
-        dob,
-        email,
-        end_date,
-        highlight_desc,
-        plan_deductible,
-        plan_max,
-        start_date,
-        total,
-      } = response.data.data.Plan;
-      this.setState({
-        allPlan: planname._id,
-        title: title,
-        short_desc: short_desc,
-        coverageAmt: coverageAmt,
-        coverage_area: coverage_area,
-        dob: dob,
-        email: email,
-        end_date: end_date,
-        highlight_desc: highlight_desc,
-        plan_deductible: plan_deductible,
-        plan_max: plan_max,
-        start_date: start_date,
-        total: total,
-      });
-      // this.setState({ title: title });
-      // this.setState({ short_desc: short_desc });
-      // this.setState({ coverageAmt: coverageAmt });
-      // this.setState({ coverage_area: coverage_area });
-      // this.setState({ dob: dob });
-      // this.setState({ email: email });
-      // this.setState({ end_date: end_date });
-      // this.setState({ highlight_desc: highlight_desc });
-      // this.setState({ plan_deductible: plan_deductible });
-      // this.setState({ plan_max: plan_max });
-      // this.setState({ start_date: start_date });
-      // this.setState({ total: total });
+    // await axiosConfig.get(`/admin/getOnePlan/${id}`).then((response) => {
+    //   console.log(response);
+    const {
+      planname,
+      title,
+      short_desc,
+      coverageAmt,
+      coverage_area,
+      dob,
+      email,
+      end_date,
+      highlight_desc,
+      plan_deductible,
+      plan_max,
+      start_date,
+      total,
+    } = this.props.location.state;
+    this.setState({
+      allPlan: planname._id,
+      title: title,
+      short_desc: short_desc,
+      coverageAmt: coverageAmt,
+      coverage_area: coverage_area,
+      dob: dob,
+      email: email,
+      end_date: end_date,
+      highlight_desc: highlight_desc,
+      plan_deductible: plan_deductible,
+      plan_max: plan_max,
+      start_date: start_date,
+      total: total,
     });
 
     await axiosConfig.get(`/user/infPlanList`).then((response) => {
@@ -452,7 +440,7 @@ export default class EditPlanDetail extends Component {
                     type="submit"
                     className="mr-1 mb-1"
                   >
-                    AddPlanDetail
+                    Update PlanDetail
                   </Button.Ripple>
                 </Col>
               </Row>

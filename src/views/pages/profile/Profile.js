@@ -45,10 +45,13 @@ class Profile extends React.Component {
     axiosConfig
       .get(`/admin/viewoneadmin/${adminId}`)
       .then((response) => {
+        console.log(response.data.data.adminimg[0]);
+        // console.log(response.data.data.adminimg[0]);
         this.setState({
           data: response.data.data,
           name: response.data.data.name,
           email: response.data.data.email,
+          adminimg: response.data.data.adminimg[0],
           mobile: response.data.data.mobile,
           password: response.data.data.password,
           cnfmPassword: response.data.data.cnfmPassword,
@@ -74,9 +77,9 @@ class Profile extends React.Component {
     data.append("mobile", this.state.mobile);
     data.append("password", this.state.password);
     data.append("cnfmPassword", this.state.cnfmPassword);
-    // if (this.state.selectedFile !== null) {
-    //   data.append("adminimg", this.state.selectedFile, this.state.selectedName);
-    // }
+    if (this.state.selectedFile !== null) {
+      data.append("adminimg", this.state.selectedFile, this.state.selectedName);
+    }
     axiosConfig
       .post(`admin/editprofile/${adminId}`, data, {
         headers: {
@@ -186,9 +189,9 @@ class Profile extends React.Component {
                         <Label>Confirm Password</Label>
                         <Input
                           type="password"
-                          name="confirmPassword"
-                          placeholder="Password"
-                          value={this.state.password}
+                          name="cnfmPassword"
+                          placeholder="confirm Password"
+                          value={this.state.cnfmPassword}
                           onChange={this.changeHandler}
                         />
                         <Label>User Image</Label>

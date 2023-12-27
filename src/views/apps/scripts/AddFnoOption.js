@@ -57,9 +57,9 @@ export default class AddFnoOption extends Component {
                   Home
                 </BreadcrumbItem>
                 <BreadcrumbItem href="/app/scripts/fnoOption" tag="a">
-                  FNO Option List
+                  Plan List
                 </BreadcrumbItem>
-                <BreadcrumbItem active>Add FNO Option</BreadcrumbItem>
+                <BreadcrumbItem active>Add Plan</BreadcrumbItem>
               </Breadcrumb>
             </div>
           </Col>
@@ -68,7 +68,7 @@ export default class AddFnoOption extends Component {
           <Row className="m-2">
             <Col>
               <h1 col-sm-6 className="float-left">
-                ADD FNO OPTIONS SCRIPT
+                ADD Plan
               </h1>
             </Col>
             <Col>

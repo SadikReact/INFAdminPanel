@@ -53,7 +53,7 @@ const navigationConfig = [
     // navLink: "/app/plans/CreatedPlanList",
   },
   {
-    id: "claim",
+    id: "Viewclaim",
     title: "View Claims",
     type: "item",
     icon: <Icon.ArrowRight size={12} />,

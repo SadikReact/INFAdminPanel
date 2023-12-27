@@ -54,7 +54,6 @@ export default class AddAgent extends Component {
 
   submitHandler = async (e) => {
     e.preventDefault();
-    debugger;
     const formData = new FormData();
     formData.append("agentName", this.state.agentName);
     formData.append("agentCode", this.state.agentCode);
@@ -69,6 +68,7 @@ export default class AddAgent extends Component {
     if (this.state.selectedFile != null) {
       formData.append("image", this.state.selectedFile);
     }
+
     try {
       const response = await axiosConfig.post(
         `/admin/agentRegistration/${adminId}`,
@@ -88,8 +88,10 @@ export default class AddAgent extends Component {
         selectedFile: "",
       });
       swal("Success!", "Submitted SuccessFull!", "success");
+      this.props.history.push("/app/agent/AgentList");
     } catch (error) {
       console.log(error);
+      swal("Something Went Wrong");
     }
   };
 

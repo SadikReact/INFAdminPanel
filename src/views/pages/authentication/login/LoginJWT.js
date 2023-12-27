@@ -32,15 +32,19 @@ class LoginJWT extends React.Component {
     await axiosConfig
       .post(`/admin/varify-otp/${adminId}`, payload)
       .then((res) => {
-        localStorage.setItem("ad-token", res.data.token);
-        localStorage.setItem("AdminData", JSON.stringify(res.data));
-        console.log(res);
-        console.log(res.data.token);
-        swal("Submittted Successfully");
-        window.location.replace("/#");
+        if (res.status == 200) {
+          localStorage.setItem("ad-token", res.data.token);
+          localStorage.setItem("AdminData", JSON.stringify(res.data));
+          swal("Submittted Successfully");
+          window.location.replace("/#");
+        } else if (res.status == 204) {
+          swal("Something Went wrong");
+        } else {
+          swal("Something Went wrong");
+        }
       })
       .catch((err) => {
-        console.log(err);
+        swal("Invalid OTP");
       });
   };
   handlechange = (e) => {
@@ -58,20 +62,21 @@ class LoginJWT extends React.Component {
       .post("/admin/adminlogin", payload)
       .then((response) => {
         if (response.status === 200) {
+          localStorage.setItem("userData", response.data.data);
           this.setState({ ShowScreen: true });
           localStorage.setItem("userId", response.data.data._id);
-          swal("OTP has been sent to Your Mail Id", "Please Check and verify");
-        } else if (response.data.status === 204) {
-          console.log(response.data);
-          swal(response.data.msg);
+          swal("OTP has been sent to Your Mail Id", "Please Verify OTP");
+        } else if (response.status === 204 || response.status === 400) {
+          swal("Some Thing went Wrong");
+        } else {
+          swal("Some Thing went Wrong122222");
         }
       })
 
       .catch((error) => {
-        console.log(error);
         swal(
           "error!",
-          "Invalied! Please enter valied Email. or Password",
+          "Invalied! Please Enter Valid Email. or Password",
           "error"
         );
       });
