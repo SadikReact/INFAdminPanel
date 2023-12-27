@@ -20,7 +20,6 @@ export default class EditAgent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // status: "",
       agentName: "",
       agentCode: "",
       email: "",
@@ -40,7 +39,6 @@ export default class EditAgent extends Component {
       .then((response) => {
         const agent = response.data.data.agent;
         this.setState({
-          // status: response.data.data.status,
           agentName: agent.agentName,
           agentCode: agent.agentCode,
           email: agent.email,
@@ -50,15 +48,13 @@ export default class EditAgent extends Component {
           zipcode: agent.zipcode,
           phone: agent.phone,
           commision: agent.commision,
+          // selectedFile: "",
         });
       })
       .catch((error) => {
         console.log(error);
       });
   }
-  // changeHandler1 = (e) => {
-  //   this.setState({ status: e.target.value });
-  // };
 
   changeHandler = (e) => {
     console.log(e.target.name, e.target.value);
@@ -71,7 +67,6 @@ export default class EditAgent extends Component {
     axiosConfig
       .post(`/editAgentProfile/${id}`, this.state)
       .then((response) => {
-        // this.setState({ scriptName: "" });
         swal("Success!", "Submitted SuccessFull!", "success");
       })
       .catch((error) => {

@@ -33,6 +33,7 @@ class LoginJWT extends React.Component {
       .post(`/admin/varify-otp/${adminId}`, payload)
       .then((res) => {
         localStorage.setItem("ad-token", res.data.token);
+        localStorage.setItem("AdminData", JSON.stringify(res.data));
         console.log(res);
         console.log(res.data.token);
         swal("Submittted Successfully");
@@ -57,7 +58,6 @@ class LoginJWT extends React.Component {
       .post("/admin/adminlogin", payload)
       .then((response) => {
         if (response.status === 200) {
-          localStorage.setItem("userData", response.data.data);
           this.setState({ ShowScreen: true });
           localStorage.setItem("userId", response.data.data._id);
           swal("OTP has been sent to Your Mail Id", "Please Check and verify");
