@@ -64,7 +64,7 @@ class PolicyTypeList extends React.Component {
         headerName: "PolicyType Description",
         field: "Description",
         // filter: true,
-        width: 180,
+        width: 250,
         cellRendererFramework: (params) => {
           return <div className="">{params?.data?.pt_type_desc}</div>;
         },

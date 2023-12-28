@@ -39,62 +39,6 @@ class PolicyList extends React.Component {
         width: 100,
         filter: true,
       },
-      //   {
-      //     headerName: "Descriptions",
-      //     field: "desc",
-      //     width: 200,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <span className="">{ReactHtmlParser(params.data.desc)}</span>
-      //         </div>
-      //       );
-      //     },
-      //   },
-      {
-        headerName: "PolicyType",
-        field: "PolicyType",
-        // filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return <div className="">Policy Type</div>;
-        },
-      },
-      {
-        headerName: "PolicyName",
-        field: "PolicyType",
-        width: 120,
-        cellRendererFramework: (params) => {
-          return <div className="">Policy Type</div>;
-        },
-      },
-      {
-        headerName: "PolicyNumber",
-        field: "PolicyType",
-        width: 130,
-        cellRendererFramework: (params) => {
-          return <div className="">Policy Number</div>;
-        },
-      },
-      {
-        headerName: "Policy Description",
-        field: "policyDescription",
-        // filter: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return <div className="">Policy Description</div>;
-        },
-      },
-      {
-        headerName: "Policy UnderWriter",
-        field: "policyUnderWriter",
-        // filter: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return <div className="">policyUnderWriter</div>;
-        },
-      },
-
       {
         headerName: "Actions",
         field: "sortorder",
@@ -128,6 +72,61 @@ class PolicyList extends React.Component {
               />
             </div>
           );
+        },
+      },
+      //   {
+      //     headerName: "Descriptions",
+      //     field: "desc",
+      //     width: 200,
+      //     cellRendererFramework: (params) => {
+      //       return (
+      //         <div className="d-flex align-items-center cursor-pointer">
+      //           <span className="">{ReactHtmlParser(params.data.desc)}</span>
+      //         </div>
+      //       );
+      //     },
+      //   },
+      {
+        headerName: "PolicyType",
+        field: "PolicyType",
+        // filter: true,
+        width: 130,
+        cellRendererFramework: (params) => {
+          return <div className="">Policy Type</div>;
+        },
+      },
+      {
+        headerName: "PolicyName",
+        field: "PolicyType",
+        width: 140,
+        cellRendererFramework: (params) => {
+          return <div className="">Policy Type</div>;
+        },
+      },
+      {
+        headerName: "PolicyNumber",
+        field: "PolicyType",
+        width: 180,
+        cellRendererFramework: (params) => {
+          return <div className="">Policy Number</div>;
+        },
+      },
+      {
+        headerName: "Policy Description",
+        field: "policyDescription",
+        // filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return <div className="">Policy Description</div>;
+        },
+      },
+      {
+        headerName: "Policy UnderWriter",
+        field: "policyUnderWriter",
+        // filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return <div className="">policyUnderWriter</div>;
         },
       },
     ],
