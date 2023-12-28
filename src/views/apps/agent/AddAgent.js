@@ -174,7 +174,7 @@ export default class AddAgent extends Component {
                     maxlength={10}
                     placeholder="Enter Mobile"
                     value={this.state.phone}
-                    // onkeypress="return this.isNumber(event)"
+                    // onkeypress="return this.isNumber(event)11"
                     onChange={this.changeHandler}
                   />
                 </Col>

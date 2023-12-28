@@ -39,7 +39,6 @@ function EditNotification() {
     setSelectedEmoji(emojiData.unified);
   }
   useEffect(() => {
-    // 35.154.252.162:5000/admin/getone_notification/64b7780a017c3f51775db992
     axiosConfig
       .get(`/admin/getone_notification/${param.id}`)
       .then((response) => {

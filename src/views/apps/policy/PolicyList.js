@@ -13,14 +13,13 @@ import {
 } from "reactstrap";
 import { Route } from "react-router-dom";
 import { AgGridReact } from "ag-grid-react";
-// import { history } from "../../../history";
-import axiosConfig from "../../../../axiosConfig";
+import axiosConfig from "../../../axiosConfig";
 import { ChevronDown, Edit, Trash2 } from "react-feather";
-import { ContextLayout } from "../../../../utility/context/Layout";
-import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
+import { ContextLayout } from "../../../utility/context/Layout";
+import "../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import swal from "sweetalert";
 import ReactHtmlParser from "react-html-parser";
-class AllaboutUs extends React.Component {
+class PolicyList extends React.Component {
   state = {
     rowData: [],
     paginationPageSize: 20,
@@ -39,39 +38,63 @@ class AllaboutUs extends React.Component {
         field: "node.rowIndex + 1",
         width: 100,
         filter: true,
-        // checkboxSelection: true,
-        // headerCheckboxSelectionFilteredOnly: true,
-        // headerCheckboxSelection: true,
       },
+      //   {
+      //     headerName: "Descriptions",
+      //     field: "desc",
+      //     width: 200,
+      //     cellRendererFramework: (params) => {
+      //       return (
+      //         <div className="d-flex align-items-center cursor-pointer">
+      //           <span className="">{ReactHtmlParser(params.data.desc)}</span>
+      //         </div>
+      //       );
+      //     },
+      //   },
       {
-        headerName: "Descriptions",
-        field: "desc",
-        width: 200,
+        headerName: "PolicyType",
+        field: "PolicyType",
+        // filter: true,
+        width: 120,
         cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span className="">{ReactHtmlParser(params.data.desc)}</span>
-            </div>
-          );
+          return <div className="">Policy Type</div>;
         },
       },
-      // {
-      //   headerName: "Status",
-      //   field: "userverified",
-      //   // filter: true,
-      //   width: 150,
-      //   cellRendererFramework: (params) => {
-      //     return params.value === "Active" ? (
-      //       <div className="badge badge-pill badge-success">
-      //         {params.data.userverified}
-      //       </div>
-      //     ) : params.value === "Inactive" ? (
-      //       <div className="badge badge-pill badge-warning">
-      //         {params.data.userverified}
-      //       </div>
-      //     ) : null;
-      //   },
-      // },
+      {
+        headerName: "PolicyName",
+        field: "PolicyType",
+        width: 120,
+        cellRendererFramework: (params) => {
+          return <div className="">Policy Type</div>;
+        },
+      },
+      {
+        headerName: "PolicyNumber",
+        field: "PolicyType",
+        width: 130,
+        cellRendererFramework: (params) => {
+          return <div className="">Policy Number</div>;
+        },
+      },
+      {
+        headerName: "Policy Description",
+        field: "policyDescription",
+        // filter: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return <div className="">Policy Description</div>;
+        },
+      },
+      {
+        headerName: "Policy UnderWriter",
+        field: "policyUnderWriter",
+        // filter: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return <div className="">policyUnderWriter</div>;
+        },
+      },
+
       {
         headerName: "Actions",
         field: "sortorder",
@@ -113,8 +136,9 @@ class AllaboutUs extends React.Component {
     this.allAboutList();
   }
   allAboutList = () => {
-    axiosConfig.get("/admin/getAbout_us").then((response) => {
+    axiosConfig.get("/admin/get_policies").then((response) => {
       const rowData = response.data.data;
+      console.log(rowData);
       this.setState({ rowData });
     });
   };
@@ -177,7 +201,7 @@ class AllaboutUs extends React.Component {
           <Row className="m-1">
             <Col>
               <h1 col-sm-6 className="float-left">
-                AboutUs List
+                Policy List
               </h1>
             </Col>
             <Col className="">
@@ -186,9 +210,9 @@ class AllaboutUs extends React.Component {
                   <Button
                     className=" btn  float-right"
                     color="primary"
-                    onClick={() => history.push("/app/about/aboutUs")}
+                    onClick={() => history.push("/app/policy/AddPolicy")}
                   >
-                    Add Aboutus
+                    Add Policy
                   </Button>
                 )}
               />
@@ -288,4 +312,4 @@ class AllaboutUs extends React.Component {
     );
   }
 }
-export default AllaboutUs;
+export default PolicyList;

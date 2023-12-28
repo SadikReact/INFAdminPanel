@@ -93,6 +93,8 @@ const NavbarUser = () => {
                 tag="a"
                 onClick={(e) => {
                   localStorage.removeItem("ad-token");
+                  localStorage.removeItem("AdminData");
+                  localStorage.removeItem("userId");
                   window.location.replace("/#/pages/login");
                 }}
               >

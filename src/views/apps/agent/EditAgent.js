@@ -38,7 +38,6 @@ export default class EditAgent extends Component {
       .then((response) => {
         const agent = response.data.data.agent;
         this.setState({
-          // status: response.data.data.status,
           agentName: agent.agentName,
           agentCode: agent.agentCode,
           email: agent.email,
@@ -48,15 +47,13 @@ export default class EditAgent extends Component {
           zipcode: agent.zipcode,
           phone: agent.phone,
           commision: agent.commision,
+          // selectedFile: "",
         });
       })
       .catch((error) => {
         console.log(error);
       });
   }
-  // changeHandler1 = (e) => {
-  //   this.setState({ status: e.target.value });
-  // };
 
   changeHandler = (e) => {
     console.log(e.target.value);
@@ -64,6 +61,7 @@ export default class EditAgent extends Component {
   };
   submitHandler = (e) => {
     e.preventDefault();
+    debugger;
     let { id } = this.props.match.params;
     axiosConfig
       .post(`/admin/editAgentProfile/${id}`, this.state)

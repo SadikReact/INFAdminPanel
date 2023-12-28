@@ -20,11 +20,11 @@ import "../../../../assets/scss/plugins/extensions/editor.scss";
 import Breadcrumbs from "../../../../components/@vuexy/breadCrumbs/BreadCrumb";
 import swal from "sweetalert";
 
-class AboutUs extends React.Component {
+class AddPolicyType extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
+      policyType: "",
       desc: "",
     };
   }
@@ -41,17 +41,20 @@ class AboutUs extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
   submitHandler = (e) => {
+    const adminId = localStorage.getItem("userId");
     e.preventDefault();
     const description = {
-      desc: this.state.desc,
+      pt_type: this.state.policyType,
+      pt_type_desc: this.state.desc,
     };
+
     axiosConfig
-      .post("/admin/add_aboutus", description)
+      .post(`/admin/add_Pt/${adminId}`, description)
       .then((response) => {
         console.log(response);
         swal("Success!", "Submitted SuccessFull!", "success");
         this.setState({ desc: "" });
-        this.props.history.push("/app/pageSetUp/about/AllaboutUs");
+        this.props.history.push("/app/pageSetUp/about/AllAddPolicyType");
       })
       .catch((error) => {
         console.log(error);
@@ -62,15 +65,15 @@ class AboutUs extends React.Component {
     return (
       <div>
         <Breadcrumbs
-          breadCrumbTitle="About Us"
+          breadCrumbTitle="PolicyType"
           breadCrumbParent="Home"
-          breadCrumbActive=" About Us"
+          breadCrumbActive="PolicyType "
         />
         <Card>
           <Row className="m-2">
             <Col>
               <h1 col-sm-6 className="float-left">
-                About Us
+                PolityType
               </h1>
             </Col>
             <Col>
@@ -78,9 +81,7 @@ class AboutUs extends React.Component {
                 render={({ history }) => (
                   <Button
                     className=" btn btn-danger float-right"
-                    onClick={() =>
-                      history.push("/app/pageSetUp/about/AllaboutUs")
-                    }
+                    onClick={() => history.push("/app/policy/PolicyTypeList")}
                   >
                     Back
                   </Button>
@@ -91,7 +92,17 @@ class AboutUs extends React.Component {
           <CardBody>
             <Form className="m-1" onSubmit={this.submitHandler}>
               <Row>
-                <Col lg="12" md="12" sm="12" className="mb-2">
+                <Col lg="6" md="6" sm="12" className="mb-2">
+                  <Label>PolcyType </Label>
+                  <Input
+                    type="text"
+                    name="policyType"
+                    placeholder="PolicyType"
+                    value={this.state.policyType}
+                    onChange={this.changeHandler}
+                  />
+                </Col>
+                <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>Descripition</Label>
                   <Editor
                     toolbarClassName="demo-toolbar-absolute"
@@ -155,4 +166,4 @@ class AboutUs extends React.Component {
   }
 }
 
-export default AboutUs;
+export default AddPolicyType;
