@@ -62,14 +62,13 @@ class LoginJWT extends React.Component {
       .post("/admin/adminlogin", payload)
       .then((response) => {
         if (response.status === 200) {
-          localStorage.setItem("userData", response.data.data);
           this.setState({ ShowScreen: true });
           localStorage.setItem("userId", response.data.data._id);
           swal("OTP has been sent to Your Mail Id", "Please Verify OTP");
         } else if (response.status === 204 || response.status === 400) {
           swal("Some Thing went Wrong");
         } else {
-          swal("Some Thing went Wrong122222");
+          swal("Some Thing went Wrong");
         }
       })
 
@@ -98,13 +97,15 @@ class LoginJWT extends React.Component {
                 renderSeparator={<span>-</span>}
                 renderInput={(props) => <input className="inputs" {...props} />}
               />
-              <Button
-                className="m-4"
-                onClick={this.handleSubmitOTP}
-                color="primary"
-              >
-                Verify OTP
-              </Button>
+              <div className="float-md-right d-block my-2">
+                <Button
+                  onClick={this.handleSubmitOTP}
+                  color="primary"
+                  className="px-75 btn-block"
+                >
+                  Verify OTP
+                </Button>
+              </div>
             </>
           ) : (
             <>
