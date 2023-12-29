@@ -149,6 +149,8 @@ const EditAgent = lazy(() => import("./views/apps/agent/EditAgent"));
 // Apply
 const VisitorList = lazy(() => import("./views/apps/apply/VisitorList"));
 // policy
+const PlanTypeList = lazy(() => import("./views/apps/plan/PlanTypeList"));
+const AddPlanType = lazy(() => import("./views/apps/plan/AddPlanType"));
 const PolicyTypeList = lazy(() =>
   import("./views/apps/policy/policyType/PolicyTypeList")
 );
@@ -636,6 +638,8 @@ class AppRouter extends React.Component {
               component={EditPlanDetail}
             />
             <AppRoute path="/app/claims/ViewClaims" component={ViewClaims} />
+            <AppRoute path="/app/plan/AddPlanType" component={AddPlanType} />
+            <AppRoute path="/app/plan/PlanTypeList" component={PlanTypeList} />
             <AppRoute
               path="/app/policy/PolicyTypeList"
               component={PolicyTypeList}
@@ -643,6 +647,10 @@ class AppRouter extends React.Component {
             <AppRoute
               path="/app/policy/AddPolicyType"
               component={AddPolicyType}
+            />
+            <AppRoute
+              path="/app/policy/EditPolicyType/:id"
+              component={EditPolicyType}
             />
             <AppRoute path="/app/policy/AddPolicy" component={AddPolicy} />
             <AppRoute path="/app/policy/PolicyList" component={PolicyList} />

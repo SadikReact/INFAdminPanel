@@ -64,9 +64,13 @@ class PolicyTypeList extends React.Component {
         headerName: "PolicyType Description",
         field: "Description",
         // filter: true,
-        width: 180,
+        width: 250,
         cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.pt_type_desc}</div>;
+          return (
+            <div className="">
+              {ReactHtmlParser(params?.data?.pt_type_desc)}
+            </div>
+          );
         },
       },
 
@@ -85,9 +89,10 @@ class PolicyTypeList extends React.Component {
                     size="25px"
                     color="blue"
                     onClick={() =>
-                      history.push(
-                        `/app/pageSetUp/about/editAboutUs/${params.data._id}`
-                      )
+                      history.push({
+                        pathname: `/app/policy/EditPolicyType/${params.data._id}`,
+                        state: params.data,
+                      })
                     }
                   />
                 )}

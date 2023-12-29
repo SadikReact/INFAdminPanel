@@ -19,7 +19,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "../../../assets/scss/plugins/extensions/editor.scss";
 import Breadcrumbs from "../../../components/@vuexy/breadCrumbs/BreadCrumb";
 import swal from "sweetalert";
-
+import ReactHtmlParser from "react-html-parser";
 class AddPolicy extends React.Component {
   constructor(props) {
     super(props);
@@ -41,6 +41,7 @@ class AddPolicy extends React.Component {
       purchased: "",
       renewed: "",
       policyActive: "",
+      policyTypeList: [],
     };
   }
 
@@ -62,21 +63,35 @@ class AddPolicy extends React.Component {
       ),
     });
   };
+  componentDidMount() {
+    axiosConfig
+      .get("/admin/get_pt")
+      .then((response) => {
+        this.setState({ policyTypeList: response.data.data });
+        console.log(response.data.data);
+      })
+      .catch((err) => {
+        swal("Something Went Wrong");
+      });
+  }
   changeHandler1 = (e) => {
     this.setState({ policyActive: e.target.value });
   };
   changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
+  handlePolicyType = (e) => {
+    this.setState({ policyType: e.target.value });
+  };
   handleImage = (e) => {
     this.setState({ plan_image: e.target.files[0] });
   };
   submitHandler = (e) => {
     e.preventDefault();
+    debugger;
     const adminId = localStorage.getItem("userId");
 
     const formdata = new FormData();
-
     formdata.append("policyName", this.state.policyName);
     formdata.append("policyNumL", this.state.policyNumber);
     formdata.append("policyDesc", this.state.policyDescription);
@@ -91,21 +106,23 @@ class AddPolicy extends React.Component {
     formdata.append("purchesLink", this.state.purchase_link);
     formdata.append("brochureLink", this.state.brochure_link);
     formdata.append("purched", this.state.purchased);
-    // formdata.append("renewed", this.state);
-    formdata.append("status", this.state.policyActive);
+    formdata.append("renewed", "csdccs");
     if (this.state.plan_image !== null) {
       formdata.append("planimg", this.state.plan_image);
     }
-    formdata.append("status", this.state.policyActive);
+    // formdata.append("status", this.state.policyActive);
+    formdata.append("status", true);
     axiosConfig
-      .post(`/admin/add_Pt/${adminId}`, formdata)
+      .post(`/admin/add_policy/${adminId}`, formdata)
       .then((response) => {
+        debugger;
         console.log(response);
         swal("Success!", "Submitted SuccessFull!", "success");
         // this.setState({ desc: "" });
-        this.props.history.push("/app/policy/PolicyList");
+        // this.props.history.push("/app/policy/PolicyList");
       })
       .catch((error) => {
+        debugger;
         console.log(error);
       });
   };
@@ -154,7 +171,7 @@ class AddPolicy extends React.Component {
                 <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>PolicyNumber</Label>
                   <Input
-                    type="number"
+                    type="text"
                     name="policyNumber"
                     placeholder="PolicyNumber"
                     value={this.state.policyNumber}
@@ -181,16 +198,6 @@ class AddPolicy extends React.Component {
                     onChange={this.changeHandler}
                   />
                 </Col>
-                {/* <Col lg="6" md="6" sm="12" className="mb-2">
-                  <Label>PolicyType </Label>
-                  <Input
-                    type="text"
-                    name="policyType"
-                    placeholder="PolicyType"
-                    value={this.state.policyType}
-                    onChange={this.changeHandler}
-                  />
-                </Col> */}
                 <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>PolicyAdditionalFeatures </Label>
                   <Input
@@ -262,14 +269,32 @@ class AddPolicy extends React.Component {
                   />
                 </Col>
                 <Col lg="6" md="6" sm="12" className="mb-2">
-                  <Label>PolcyType </Label>
-                  <Input
+                  {/* <FormGroup> */}
+                  {/* <Input
                     type="text"
                     name="policyType"
                     placeholder="PolicyType"
                     value={this.state.policyType}
                     onChange={this.changeHandler}
-                  />
+                  /> */}
+                  <Label for="data-category">Policy Type</Label>
+                  <Input
+                    type="select"
+                    id="data-category"
+                    value={this.state.policyType}
+                    onChange={this.handlePolicyType}
+                    // onChange={(e) =>
+                    //   this.setState({ category: e.target.value })
+                    // }
+                  >
+                    <option value="">Select PolicyType</option>
+                    {this.state.policyTypeList?.map((itm) => (
+                      <option key={itm._id} value={itm._id}>
+                        {itm.pt_type}
+                      </option>
+                    ))}
+                  </Input>
+                  {/* </FormGroup> */}
                 </Col>
                 {/* <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>ParaDescription </Label>

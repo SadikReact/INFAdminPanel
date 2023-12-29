@@ -18,8 +18,8 @@ import { ChevronDown, Edit, Trash2 } from "react-feather";
 import { ContextLayout } from "../../../utility/context/Layout";
 import "../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import swal from "sweetalert";
-// import ReactHtmlParser from "react-html-parser";
-class PolicyList extends React.Component {
+import ReactHtmlParser from "react-html-parser";
+class PlanTypeList extends React.Component {
   state = {
     rowData: [],
     paginationPageSize: 20,
@@ -39,6 +39,43 @@ class PolicyList extends React.Component {
         width: 100,
         filter: true,
       },
+      // {
+      //   headerName: "Descriptions",
+      //   field: "desc",
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <span className="">{ReactHtmlParser(params.data.desc)}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      {
+        headerName: "PolicyType",
+        field: "PolicyType",
+        // filter: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return <div className="">{params?.data?.pt_type}</div>;
+        },
+      },
+      {
+        headerName: "PolicyType Description",
+        field: "Description",
+        filter: true,
+        width: 250,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="">
+              <span className="">
+                {ReactHtmlParser(params?.data?.pt_type_desc)}
+              </span>
+            </div>
+          );
+        },
+      },
+
       {
         headerName: "Actions",
         field: "sortorder",
@@ -54,9 +91,10 @@ class PolicyList extends React.Component {
                     size="25px"
                     color="blue"
                     onClick={() =>
-                      history.push(
-                        `/app/pageSetUp/about/editAboutUs/${params.data._id}`
-                      )
+                      history.push({
+                        pathname: `/app/policy/EditPolicyType/${params.data._id}`,
+                        state: params.data,
+                      })
                     }
                   />
                 )}
@@ -74,196 +112,21 @@ class PolicyList extends React.Component {
           );
         },
       },
-      //   {
-      //     headerName: "Descriptions",
-      //     field: "desc",
-      //     width: 200,
-      //     cellRendererFramework: (params) => {
-      //       return (
-      //         <div className="d-flex align-items-center cursor-pointer">
-      //           <span className="">{ReactHtmlParser(params.data.desc)}</span>
-      //         </div>
-      //       );
-      //     },
-      //   },
-      // {
-      //   headerName: "PolicyType",
-      //   field: "PolicyType",
-      //   // filter: true,
-      //   width: 130,
-      //   cellRendererFramework: (params) => {
-      //     return <div className="">{params?.data?.policyType}</div>
-      //   },
-      // },
-      {
-        headerName: "PolicyName",
-        field: "PolicyName",
-        width: 140,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.policyName}</div>;
-        },
-      },
-      {
-        headerName: "PolicyNumber",
-        field: "PolicyNumber",
-        width: 180,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.policyNum}</div>;
-        },
-      },
-      {
-        headerName: "Policy Description",
-        field: "policyDescription",
-        // filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.policyDesc}</div>;
-        },
-      },
-      {
-        headerName: "Policy UnderWriter",
-        field: "policyUnderWriter",
-        // filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.policyUnderWriter}</div>;
-        },
-      },
-      {
-        headerName: "Proprietary",
-        field: "proprietary",
-        // filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return <div className="">policyUnderWriter</div>;
-        },
-      },
-      {
-        headerName: "PolicyAdditionalFeatures",
-        field: "policyAdditionalFeatures",
-        // filter: true,
-        width: 250,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.policyAdtional}</div>;
-        },
-      },
-      {
-        headerName: "policyDescription",
-        field: "policyDescription",
-        // filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.policyDesc}</div>;
-        },
-      },
-      {
-        headerName: "paraDescription",
-        field: "paraDescription",
-        // filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.paraDesc}</div>;
-        },
-      },
-      {
-        headerName: "Policy Page",
-        field: "policy_page",
-        // filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.policyPage}</div>;
-        },
-      },
-      {
-        headerName: "policy Document",
-        field: "policy_document",
-        // filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.policyDocument}</div>;
-        },
-      },
-      {
-        headerName: "Policy FAQ",
-        field: "policy_FAQ",
-        // filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.policyFAQ}</div>;
-        },
-      },
-      {
-        headerName: "Purchase Link",
-        field: "purchase_link",
-        // filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.purchesLink}</div>;
-        },
-      },
-      {
-        headerName: "Plan Image",
-        field: "plan_image",
-        // filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="">
-              <img src={params?.data?.planimg[0]} alt="IMG not found" />
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Brochure Link",
-        field: "brochure_link",
-        // filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.brochureLink}</div>;
-        },
-      },
-      {
-        headerName: "Purchased",
-        field: "purchased",
-        // filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.renewed}</div>;
-        },
-      },
-      {
-        headerName: "Renewed",
-        field: "renewed",
-        // filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.renewed}</div>;
-        },
-      },
-      {
-        headerName: "PolicyActive",
-        field: "policyActive",
-        // filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.renewed}</div>;
-        },
-      },
     ],
   };
   componentDidMount() {
     this.allAboutList();
   }
-
   allAboutList = () => {
-    axiosConfig.get("/admin/get_policies").then((response) => {
-      const rowData = response.data.data;
-      console.log(rowData);
-      if (rowData?.length) {
+    axiosConfig
+      .get("/admin/get_pt")
+      .then((response) => {
+        const rowData = response.data.data;
         this.setState({ rowData });
-      }
-    });
+      })
+      .catch((err) => {
+        swal("Something Went Wrong");
+      });
   };
 
   runthisfunction(id) {
@@ -283,7 +146,7 @@ class PolicyList extends React.Component {
         case "cancel":
           break;
         case "catch":
-          axiosConfig.delete(`/admin/dlt_abtus/${id}`).then((response) => {
+          axiosConfig.delete(`/admin/dlt_pt/${id}`).then((response) => {
             this.allAboutList();
           });
           break;
@@ -324,7 +187,7 @@ class PolicyList extends React.Component {
           <Row className="m-1">
             <Col>
               <h1 col-sm-6 className="float-left">
-                Policy List
+                PlanType List
               </h1>
             </Col>
             <Col className="">
@@ -333,9 +196,9 @@ class PolicyList extends React.Component {
                   <Button
                     className=" btn  float-right"
                     color="primary"
-                    onClick={() => history.push("/app/policy/AddPolicy")}
+                    onClick={() => history.push("/app/policy/AddPolicyType")}
                   >
-                    Add Policy
+                    Add PlanType
                   </Button>
                 )}
               />
@@ -435,4 +298,4 @@ class PolicyList extends React.Component {
     );
   }
 }
-export default PolicyList;
+export default PlanTypeList;
