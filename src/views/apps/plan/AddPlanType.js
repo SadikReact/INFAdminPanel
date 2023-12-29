@@ -11,20 +11,20 @@ import {
 } from "reactstrap";
 // import swal from "sweetalert";
 import { Route } from "react-router-dom";
-import axiosConfig from "../../../../axiosConfig";
+import axiosConfig from "../../../axiosConfig";
 import { EditorState, convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import "../../../../assets/scss/plugins/extensions/editor.scss";
-import Breadcrumbs from "../../../../components/@vuexy/breadCrumbs/BreadCrumb";
+import "../../../assets/scss/plugins/extensions/editor.scss";
+import Breadcrumbs from "../../../components/@vuexy/breadCrumbs/BreadCrumb";
 import swal from "sweetalert";
 
-class AddPolicyType extends React.Component {
+class AddPlanType extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      policyType: "",
+      planType: "",
       desc: "",
     };
   }
@@ -73,7 +73,7 @@ class AddPolicyType extends React.Component {
           <Row className="m-2">
             <Col>
               <h1 col-sm-6 className="float-left">
-                PolityType
+                Add Plan Type
               </h1>
             </Col>
             <Col>
@@ -93,12 +93,12 @@ class AddPolicyType extends React.Component {
             <Form className="m-1" onSubmit={this.submitHandler}>
               <Row>
                 <Col lg="6" md="6" sm="12" className="mb-2">
-                  <Label>PolcyType </Label>
+                  <Label>PlanType </Label>
                   <Input
                     type="text"
-                    name="policyType"
-                    placeholder="PolicyType"
-                    value={this.state.policyType}
+                    name="planType"
+                    placeholder="PlanType"
+                    value={this.state.planType}
                     onChange={this.changeHandler}
                   />
                 </Col>
@@ -166,4 +166,4 @@ class AddPolicyType extends React.Component {
   }
 }
 
-export default AddPolicyType;
+export default AddPlanType;
