@@ -14,11 +14,11 @@ import {
 import { Route } from "react-router-dom";
 import { AgGridReact } from "ag-grid-react";
 import axiosConfig from "../../../axiosConfig";
-import { ChevronDown, Edit, Trash2 } from "react-feather";
+import { ChevronDown, Edit, Eye, Trash2 } from "react-feather";
 import { ContextLayout } from "../../../utility/context/Layout";
 import "../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import swal from "sweetalert";
-// import ReactHtmlParser from "react-html-parser";
+import ReactHtmlParser from "react-html-parser";
 class PolicyList extends React.Component {
   state = {
     rowData: [],
@@ -49,14 +49,24 @@ class PolicyList extends React.Component {
             <div className="actions cursor-pointer">
               <Route
                 render={({ history }) => (
+                  <Eye
+                    className="mr-50"
+                    size="25px"
+                    color="green"
+                    onClick={() =>
+                      history.push(`/app/policy/ViewPolicy/${params.data._id}`)
+                    }
+                  />
+                )}
+              />
+              <Route
+                render={({ history }) => (
                   <Edit
                     className="mr-50"
                     size="25px"
                     color="blue"
                     onClick={() =>
-                      history.push(
-                        `/app/pageSetUp/about/editAboutUs/${params.data._id}`
-                      )
+                      history.push(`/app/policy/EditPolicy/${params.data._id}`)
                     }
                   />
                 )}
@@ -86,15 +96,24 @@ class PolicyList extends React.Component {
       //       );
       //     },
       //   },
-      // {
-      //   headerName: "PolicyType",
-      //   field: "PolicyType",
-      //   // filter: true,
-      //   width: 130,
-      //   cellRendererFramework: (params) => {
-      //     return <div className="">{params?.data?.policyType}</div>
-      //   },
-      // },
+      {
+        headerName: "PolicyId",
+        field: "PolicyId",
+        filter: true,
+        width: 250,
+        cellRendererFramework: (params) => {
+          return <div className="">{params?.data?._id}</div>;
+        },
+      },
+      {
+        headerName: "PolicyType",
+        field: "PolicyType",
+        filter: true,
+        width: 130,
+        cellRendererFramework: (params) => {
+          return <div className="">{params?.data?.policyType?.pt_type}</div>;
+        },
+      },
       {
         headerName: "PolicyName",
         field: "PolicyName",
@@ -111,19 +130,11 @@ class PolicyList extends React.Component {
           return <div className="">{params?.data?.policyNum}</div>;
         },
       },
-      {
-        headerName: "Policy Description",
-        field: "policyDescription",
-        // filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.policyDesc}</div>;
-        },
-      },
+
       {
         headerName: "Policy UnderWriter",
         field: "policyUnderWriter",
-        // filter: true,
+        filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return <div className="">{params?.data?.policyUnderWriter}</div>;
@@ -132,16 +143,16 @@ class PolicyList extends React.Component {
       {
         headerName: "Proprietary",
         field: "proprietary",
-        // filter: true,
+        filter: true,
         width: 200,
         cellRendererFramework: (params) => {
-          return <div className="">policyUnderWriter</div>;
+          return <div className="">{params?.data?.proproetary}</div>;
         },
       },
       {
         headerName: "PolicyAdditionalFeatures",
         field: "policyAdditionalFeatures",
-        // filter: true,
+        filter: true,
         width: 250,
         cellRendererFramework: (params) => {
           return <div className="">{params?.data?.policyAdtional}</div>;
@@ -150,25 +161,29 @@ class PolicyList extends React.Component {
       {
         headerName: "policyDescription",
         field: "policyDescription",
-        // filter: true,
+        filter: true,
         width: 200,
         cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.policyDesc}</div>;
+          return (
+            <div className="">{ReactHtmlParser(params?.data?.policyDesc)}</div>
+          );
         },
       },
       {
         headerName: "paraDescription",
         field: "paraDescription",
-        // filter: true,
+        filter: true,
         width: 200,
         cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.paraDesc}</div>;
+          return (
+            <div className="">{ReactHtmlParser(params?.data?.paraDesc)}</div>
+          );
         },
       },
       {
         headerName: "Policy Page",
         field: "policy_page",
-        // filter: true,
+        filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return <div className="">{params?.data?.policyPage}</div>;
@@ -177,7 +192,7 @@ class PolicyList extends React.Component {
       {
         headerName: "policy Document",
         field: "policy_document",
-        // filter: true,
+        filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return <div className="">{params?.data?.policyDocument}</div>;
@@ -186,7 +201,7 @@ class PolicyList extends React.Component {
       {
         headerName: "Policy FAQ",
         field: "policy_FAQ",
-        // filter: true,
+        filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return <div className="">{params?.data?.policyFAQ}</div>;
@@ -195,7 +210,7 @@ class PolicyList extends React.Component {
       {
         headerName: "Purchase Link",
         field: "purchase_link",
-        // filter: true,
+        filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return <div className="">{params?.data?.purchesLink}</div>;
@@ -204,12 +219,19 @@ class PolicyList extends React.Component {
       {
         headerName: "Plan Image",
         field: "plan_image",
-        // filter: true,
+        filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
-            <div className="">
-              <img src={params?.data?.planimg[0]} alt="IMG not found" />
+            <div className="mainDiv">
+              <img
+                className="imageSet"
+                src={params?.data?.planimg[0]}
+                alt="IMG not found"
+                width={80}
+                height={40}
+                style={{ borderRadius: "10px" }}
+              />
             </div>
           );
         },
@@ -217,7 +239,7 @@ class PolicyList extends React.Component {
       {
         headerName: "Brochure Link",
         field: "brochure_link",
-        // filter: true,
+        filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return <div className="">{params?.data?.brochureLink}</div>;
@@ -226,16 +248,16 @@ class PolicyList extends React.Component {
       {
         headerName: "Purchased",
         field: "purchased",
-        // filter: true,
+        filter: true,
         width: 200,
         cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.renewed}</div>;
+          return <div className="">{params?.data?.purched}</div>;
         },
       },
       {
         headerName: "Renewed",
         field: "renewed",
-        // filter: true,
+        filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return <div className="">{params?.data?.renewed}</div>;
@@ -244,7 +266,7 @@ class PolicyList extends React.Component {
       {
         headerName: "PolicyActive",
         field: "policyActive",
-        // filter: true,
+        filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return <div className="">{params?.data?.renewed}</div>;
@@ -253,10 +275,10 @@ class PolicyList extends React.Component {
     ],
   };
   componentDidMount() {
-    this.allAboutList();
+    this.AllPolicyList();
   }
 
-  allAboutList = () => {
+  AllPolicyList = () => {
     axiosConfig.get("/admin/get_policies").then((response) => {
       const rowData = response.data.data;
       console.log(rowData);
@@ -283,8 +305,8 @@ class PolicyList extends React.Component {
         case "cancel":
           break;
         case "catch":
-          axiosConfig.delete(`/admin/dlt_abtus/${id}`).then((response) => {
-            this.allAboutList();
+          axiosConfig.delete(`/admin/deltPolicy/${id}`).then((response) => {
+            this.AllPolicyList();
           });
           break;
         default:

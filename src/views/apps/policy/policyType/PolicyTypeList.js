@@ -39,41 +39,6 @@ class PolicyTypeList extends React.Component {
         width: 100,
         filter: true,
       },
-      // {
-      //   headerName: "Descriptions",
-      //   field: "desc",
-      //   width: 200,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <span className="">{ReactHtmlParser(params.data.desc)}</span>
-      //       </div>
-      //     );
-      //   },
-      // },
-      {
-        headerName: "PolicyType",
-        field: "PolicyType",
-        // filter: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.pt_type}</div>;
-        },
-      },
-      {
-        headerName: "PolicyType Description",
-        field: "Description",
-        // filter: true,
-        width: 250,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="">
-              {ReactHtmlParser(params?.data?.pt_type_desc)}
-            </div>
-          );
-        },
-      },
-
       {
         headerName: "Actions",
         field: "sortorder",
@@ -106,6 +71,40 @@ class PolicyTypeList extends React.Component {
                   this.runthisfunction(params.data._id);
                 }}
               />
+            </div>
+          );
+        },
+      },
+      // {
+      //   headerName: "Descriptions",
+      //   field: "desc",
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <span className="">{ReactHtmlParser(params.data.desc)}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      {
+        headerName: "PolicyType",
+        field: "PolicyType",
+        // filter: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return <div className="">{params?.data?.pt_type}</div>;
+        },
+      },
+      {
+        headerName: "PolicyType Description",
+        field: "Description",
+        // filter: true,
+        width: 250,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="">
+              {ReactHtmlParser(params?.data?.pt_type_desc)}
             </div>
           );
         },
