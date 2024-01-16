@@ -18,7 +18,7 @@ import swal from "sweetalert";
 import { Route } from "react-router-dom";
 import Multiselect from "multiselect-react-dropdown";
 
-export default class AddFnoOption extends Component {
+export default class AddPlan extends Component {
   constructor(props) {
     super(props);
     this.state = {

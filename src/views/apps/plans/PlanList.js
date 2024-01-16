@@ -56,7 +56,7 @@ class PlanList extends React.Component {
                     size="25px"
                     color="blue"
                     onClick={() =>
-                      history.push(`/app/scripts/editOption/${params.data._id}`)
+                      history.push(`/app/plans/editPlan/${params.data._id}`)
                     }
                   />
                 )}

@@ -61,10 +61,16 @@ class LoginJWT extends React.Component {
     axiosConfig
       .post("/admin/adminlogin", payload)
       .then((response) => {
+        debugger
+        console.log(response)
         if (response.status === 200) {
-          this.setState({ ShowScreen: true });
+          // this.setState({ ShowScreen: true });
+          localStorage.setItem("ad-token", response.data.token);
+          localStorage.setItem("AdminData", JSON.stringify(response.data));
           localStorage.setItem("userId", response.data.data._id);
-          swal("OTP has been sent to Your Mail Id", "Please Verify OTP");
+          window.location.replace("/#");
+          swal("Login Successfully");
+          // swal("OTP has been sent to Your Mail Id", "Please Verify OTP");
         } else if (response.status === 204 || response.status === 400) {
           swal("Some Thing went Wrong");
         } else {
@@ -84,7 +90,7 @@ class LoginJWT extends React.Component {
     return (
       <React.Fragment>
         <CardBody className="pt-1">
-          {this.state.ShowScreen ? (
+          {/* {this.state.ShowScreen ? (
             <>
               <OtpInput
                 containerStyle="true inputdata"
@@ -107,7 +113,7 @@ class LoginJWT extends React.Component {
                 </Button>
               </div>
             </>
-          ) : (
+          ) : ( */}
             <>
               <Form onSubmit={this.handleLogin}>
                 <FormGroup className="form-label-group position-relative has-icon-left">
@@ -117,7 +123,7 @@ class LoginJWT extends React.Component {
                     placeholder="E-mail "
                     value={this.state.email}
                     onChange={this.handlechange}
-                    // required
+                    required
                   />
                   <div className="form-control-position">
                     <Mail size={15} />
@@ -131,7 +137,7 @@ class LoginJWT extends React.Component {
                     placeholder="Password"
                     value={this.state.password}
                     onChange={this.handlechange}
-                    // required
+                    required
                   />
                   <div className="form-control-position">
                     <Lock size={15} />
@@ -162,7 +168,7 @@ class LoginJWT extends React.Component {
                 </div>
               </Form>
             </>
-          )}
+          {/* )} */}
         </CardBody>
       </React.Fragment>
     );
