@@ -57,7 +57,6 @@ export default class EditPolicy extends Component {
       .get("/admin/get_pt")
       .then((response) => {
         this.setState({ policyTypeList: response.data.data });
-        console.log(response.data.data);
       })
       .catch((err) => {
         swal("Something Went Wrong");
@@ -65,11 +64,11 @@ export default class EditPolicy extends Component {
     axiosConfig
       .get(`/admin/getOnePolicy/${id}`)
       .then((response) => {
-        console.log(response.data.data);
+        console.log(response.data?.data?.policyType.pt_type);
+        console.log(response.data?.data?.policyType._id);
         const {
           paraDesc,
           brochureLink,
-          planimg,
           policyAdtional,
           policyDesc,
           policyDocument,
@@ -94,13 +93,12 @@ export default class EditPolicy extends Component {
         );
         const editorState = EditorState.createWithContent(contentState);
         const editorState1 = EditorState.createWithContent(contentState1);
-        console.log(policyType?.pt_type);
         this.setState({
           policyName: policyName,
           policyNumber: policyNum,
           policyUnderWriter: policyUnderWriter,
           proprietary: proproetary,
-          policyType: policyType?.pt_type,
+          policyType: policyType?._id,
           policyAdditionalFeatures: policyAdtional,
           policyDescription: policyDesc,
           paraDescription: paraDesc,
@@ -108,7 +106,6 @@ export default class EditPolicy extends Component {
           policy_document: policyDocument,
           policy_FAQ: policyFAQ,
           purchase_link: purchesLink,
-          plan_image: "",
           brochure_link: brochureLink,
           purchased: purched,
           renewed: renewed,
@@ -118,7 +115,7 @@ export default class EditPolicy extends Component {
         });
       })
       .catch((error) => {
-        console.log(error.response);
+        swal("Something Went Wrong");
       });
   }
 
@@ -149,7 +146,6 @@ export default class EditPolicy extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
   submitHandler = (e) => {
-    debugger;
     const formdata = new FormData();
     formdata.append("policyName", this.state.policyName);
     formdata.append("policyNum", this.state.policyNumber);
@@ -172,16 +168,15 @@ export default class EditPolicy extends Component {
     formdata.append("status", this.state.policyActive);
     e.preventDefault();
     let { id } = this.props.match.params;
+    console.log(this.state.policyType);
     axiosConfig
       .post(`/admin/editPolicy/${id}`, formdata)
       .then((response) => {
-        debugger;
-        console.log(response);
         swal("Success!", "Submitted SuccessFull!", "success");
         this.props.history.push("/app/policy/PolicyList");
       })
       .catch((error) => {
-        console.log(error.response);
+        swal("Something Went Wrong");
       });
   };
 
@@ -338,8 +333,10 @@ export default class EditPolicy extends Component {
                   <Input
                     type="select"
                     id="data-category"
+                    name="policyType"
                     value={this.state.policyType}
                     onChange={this.handlePolicyType}
+                    defaultValue={this.state.policyType}
                   >
                     {this.state.policyTypeList?.map((itm) => (
                       <option key={itm._id} value={itm._id}>

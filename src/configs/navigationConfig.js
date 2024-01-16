@@ -80,7 +80,7 @@ const navigationConfig = [
 
   {
     type: "groupHeader",
-    groupTitle: "PlanType And Benefits",
+    groupTitle: "PlanType",
   },
   {
     id: "PlanType",
@@ -92,7 +92,7 @@ const navigationConfig = [
   },
   {
     id: "plans",
-    title: "Plans Benefits",
+    title: "Plans List",
     type: "item",
     icon: <Icon.ArrowRight size={12} />,
     permissions: ["admin", "editor"],
@@ -101,11 +101,11 @@ const navigationConfig = [
 
   {
     type: "groupHeader",
-    groupTitle: "Add Plan",
+    groupTitle: "Plan Benefits",
   },
   {
     id: "Plan",
-    title: "Plan List",
+    title: "Plan Benefits",
     type: "item",
     icon: <Icon.ArrowRight size={12} />,
     permissions: ["admin", "editor"],
