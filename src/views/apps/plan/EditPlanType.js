@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   Card,
   CardBody,
@@ -8,72 +8,104 @@ import {
   Label,
   Input,
   Button,
+  Breadcrumb,
+  BreadcrumbItem,
 } from "reactstrap";
-// import swal from "sweetalert";
-import { Route } from "react-router-dom";
-import axiosConfig from "../../../axiosConfig";
-import { EditorState, convertToRaw } from "draft-js";
+import ReactHtmlParser from "react-html-parser";
+import {
+  ContentState,
+  EditorState,
+  convertFromHTML,
+  convertToRaw,
+} from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
+import { Route } from "react-router-dom";
+import axiosConfig from "../../../axiosConfig";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "../../../assets/scss/plugins/extensions/editor.scss";
-import Breadcrumbs from "../../../components/@vuexy/breadCrumbs/BreadCrumb";
 import swal from "sweetalert";
-
-class AddPlanType extends React.Component {
+export default class EditPlanType extends Component {
   constructor(props) {
     super(props);
     this.state = {
       planType: "",
-      desc: "",
+      planDescription: "",
+      editorState: EditorState.createEmpty(),
     };
+  }
+  componentDidMount() {
+    let { id } = this.props.match.params;
+    axiosConfig
+      .get(`/admin/getOne_plantyp/${id}`)
+      .then((response) => {
+        console.log(response.data.data);
+        const { plan_type, plan_desc } = response.data.data;
+        const description = plan_desc;
+        const contentState = ContentState.createFromBlockArray(
+          convertFromHTML(description)
+        );
+        const editorState = EditorState.createWithContent(contentState);
+        this.setState({
+          planType: plan_type,
+          planDescription: plan_desc,
+          editorState: editorState,
+        });
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
   }
   onEditorStateChange = (editorState) => {
     this.setState({
       editorState,
-      desc: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+      planDescription: draftToHtml(
+        convertToRaw(editorState.getCurrentContent())
+      ),
     });
-  };
-  changeHandler1 = (e) => {
-    this.setState({ status: e.target.value });
   };
   changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
   submitHandler = (e) => {
-    const adminId = localStorage.getItem("userId");
-    e.preventDefault();
-    const description = {
+    const payload = {
       plan_type: this.state.planType,
-      plan_desc: this.state.desc,
+      plan_desc: this.state.planDescription,
     };
-
+    e.preventDefault();
+    let { id } = this.props.match.params;
     axiosConfig
-      .post(`/admin/add_plan_typ/${adminId}`, description)
+      .post(`/admin/edit_plantyp/${id}`, payload)
       .then((response) => {
         console.log(response);
         swal("Success!", "Submitted SuccessFull!", "success");
-        this.setState({ desc: "" });
-        this.props.history.push("/app/plan/PlanTypeList");
+        this.props.history.push(`/app/plan/PlanTypeList`);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response);
       });
   };
 
   render() {
     return (
       <div>
-        <Breadcrumbs
-          breadCrumbTitle="PlanType"
-          breadCrumbParent="Home"
-          breadCrumbActive="PlanType"
-        />
+        <Row>
+          <Col sm="12">
+            <div>
+              <Breadcrumb listTag="div">
+                <BreadcrumbItem href="/" tag="a">
+                  Home
+                </BreadcrumbItem>
+                <BreadcrumbItem active>Edit PlanType</BreadcrumbItem>
+              </Breadcrumb>
+            </div>
+          </Col>
+        </Row>
         <Card>
           <Row className="m-2">
             <Col>
               <h1 col-sm-6 className="float-left">
-                Add PlanType
+                Edit PlanType
               </h1>
             </Col>
             <Col>
@@ -102,7 +134,7 @@ class AddPlanType extends React.Component {
                     onChange={this.changeHandler}
                   />
                 </Col>
-                <Col lg="6" md="6" sm="12" className="mb-2">
+                <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label>Descripition</Label>
                   <Editor
                     toolbarClassName="demo-toolbar-absolute"
@@ -110,6 +142,7 @@ class AddPlanType extends React.Component {
                     editorClassName="demo-editor"
                     editorState={this.state.editorState}
                     onEditorStateChange={this.onEditorStateChange}
+                    defaultContentState={ReactHtmlParser(this.state.desc)}
                     toolbar={{
                       options: [
                         "inline",
@@ -146,15 +179,20 @@ class AddPlanType extends React.Component {
                   />
                 </Col>
               </Row>
-
               <Row>
-                <Col lg="6" md="6" sm="6" className="mb-2">
+                <Col
+                  lg="6"
+                  md="6"
+                  sm="6"
+                  className="mb-2"
+                  style={{ marginLeft: "15px" }}
+                >
                   <Button.Ripple
                     color="primary"
                     type="submit"
                     className="mr-1 mb-1"
                   >
-                    Submit
+                    Update PlanType
                   </Button.Ripple>
                 </Col>
               </Row>
@@ -165,5 +203,3 @@ class AddPlanType extends React.Component {
     );
   }
 }
-
-export default AddPlanType;

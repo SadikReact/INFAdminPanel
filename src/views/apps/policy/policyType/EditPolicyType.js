@@ -11,20 +11,23 @@ import {
   Breadcrumb,
   BreadcrumbItem,
 } from "reactstrap";
-// import swal from "sweetalert";
 import ReactHtmlParser from "react-html-parser";
-import { Route } from "react-router-dom";
-import axiosConfig from "../../../../axiosConfig";
-import { EditorState, convertToRaw } from "draft-js";
+import {
+  ContentState,
+  EditorState,
+  convertFromHTML,
+  convertToRaw,
+} from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
+import { Route } from "react-router-dom";
+import axiosConfig from "../../../../axiosConfig";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "../../../../assets/scss/plugins/extensions/editor.scss";
 import swal from "sweetalert";
-export default class EditAboutUs extends Component {
+export default class EditPolicyType extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       policyType: "",
       policyDescription: "",
@@ -32,23 +35,25 @@ export default class EditAboutUs extends Component {
     };
   }
   componentDidMount() {
-    const { pt_type, pt_type_desc } = this.props.location.state;
-    console.log(this.props.location.state.pt_type);
-    this.setState({ policyType: pt_type });
-    this.setState({ policyDescription: pt_type_desc });
-    console.log(this.props.location.state.pt_type_desc);
-    // let { id } = this.props.match.params;
-    // axiosConfig
-    //   .get(`/admin/getone_aboutus/${id}`)
-    //   .then((response) => {
-    //     console.log(response.data.data.desc);
-    //     this.setState({
-    //       desc: response.data.data.desc,
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error.response);
-    //   });
+    let { id } = this.props.match.params;
+    axiosConfig
+      .get(`/admin/get_pt_one/${id}`)
+      .then((response) => {
+        const { pt_type, pt_type_desc } = response.data.data;
+        const description = pt_type_desc;
+        const contentState = ContentState.createFromBlockArray(
+          convertFromHTML(description)
+        );
+        const editorState = EditorState.createWithContent(contentState);
+        this.setState({
+          policyType: pt_type,
+          policyDescription: pt_type_desc,
+          editorState: editorState,
+        });
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
   }
   onEditorStateChange = (editorState) => {
     this.setState({
@@ -98,7 +103,6 @@ export default class EditAboutUs extends Component {
         <Card>
           <Row className="m-2">
             <Col>
-              {/* <span>{ReactHtmlParser(params.data.desc)}</span> */}
               <h1 col-sm-6 className="float-left">
                 Edit PolicyType
               </h1>
@@ -137,6 +141,7 @@ export default class EditAboutUs extends Component {
                     editorClassName="demo-editor"
                     editorState={this.state.editorState}
                     onEditorStateChange={this.onEditorStateChange}
+                    defaultContentState={ReactHtmlParser(this.state.desc)}
                     toolbar={{
                       options: [
                         "inline",

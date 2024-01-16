@@ -39,43 +39,6 @@ class PlanTypeList extends React.Component {
         width: 100,
         filter: true,
       },
-      // {
-      //   headerName: "Descriptions",
-      //   field: "desc",
-      //   width: 200,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <span className="">{ReactHtmlParser(params.data.desc)}</span>
-      //       </div>
-      //     );
-      //   },
-      // },
-      {
-        headerName: "PolicyType",
-        field: "PolicyType",
-        // filter: true,
-        width: 150,
-        cellRendererFramework: (params) => {
-          return <div className="">{params?.data?.pt_type}</div>;
-        },
-      },
-      {
-        headerName: "PolicyType Description",
-        field: "Description",
-        filter: true,
-        width: 250,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="">
-              <span className="">
-                {ReactHtmlParser(params?.data?.pt_type_desc)}
-              </span>
-            </div>
-          );
-        },
-      },
-
       {
         headerName: "Actions",
         field: "sortorder",
@@ -92,7 +55,7 @@ class PlanTypeList extends React.Component {
                     color="blue"
                     onClick={() =>
                       history.push({
-                        pathname: `/app/policy/EditPolicyType/${params.data._id}`,
+                        pathname: `/app/plan/EditPlanType/${params.data._id}`,
                         state: params.data,
                       })
                     }
@@ -112,6 +75,31 @@ class PlanTypeList extends React.Component {
           );
         },
       },
+
+      {
+        headerName: "PlanType",
+        field: "PlanType",
+        // filter: true,
+        width: 150,
+        cellRendererFramework: (params) => {
+          return <div className="">{params?.data?.plan_type}</div>;
+        },
+      },
+      {
+        headerName: "PlanType Description",
+        field: "Description",
+        filter: true,
+        width: 500,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="">
+              <span className="">
+                {ReactHtmlParser(params?.data?.plan_desc)}
+              </span>
+            </div>
+          );
+        },
+      },
     ],
   };
   componentDidMount() {
@@ -119,7 +107,7 @@ class PlanTypeList extends React.Component {
   }
   allAboutList = () => {
     axiosConfig
-      .get("/admin/get_pt")
+      .get("/admin/get_plan_typ")
       .then((response) => {
         const rowData = response.data.data;
         this.setState({ rowData });
@@ -146,7 +134,7 @@ class PlanTypeList extends React.Component {
         case "cancel":
           break;
         case "catch":
-          axiosConfig.delete(`/admin/dlt_pt/${id}`).then((response) => {
+          axiosConfig.delete(`/admin/dlt_plantyp/${id}`).then((response) => {
             this.allAboutList();
           });
           break;
@@ -196,7 +184,7 @@ class PlanTypeList extends React.Component {
                   <Button
                     className=" btn  float-right"
                     color="primary"
-                    onClick={() => history.push("/app/policy/AddPolicyType")}
+                    onClick={() => history.push("/app/plan/AddPlanType")}
                   >
                     Add PlanType
                   </Button>

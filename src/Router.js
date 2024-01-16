@@ -7,6 +7,7 @@ import Spinner from "./components/@vuexy/spinner/Loading-spinner";
 import knowledgeBaseCategory from "./views/pages/knowledge-base/Category";
 import knowledgeBaseQuestion from "./views/pages/knowledge-base/Questions";
 import { ContextLayout } from "./utility/context/Layout";
+import EditPlanType from "./views/apps/plan/EditPlanType";
 
 const analyticsDashboard = lazy(() =>
   import("./views/dashboard/analytics/AnalyticsDashboard")
@@ -120,9 +121,18 @@ const EditPlan = lazy(() => import("./views/apps/plans/EditPlan"));
 
 // create Plan
 const CreatedPlanList = lazy(() =>
-  import("./views/apps/plans/CreatedPlanList")
+  import("./views/apps/plan/PlanBenefitsList")
 );
-const CreatePlan = lazy(() => import("./views/apps/plans/CreatePlan"));
+const CreatePlan = lazy(() => import("./views/apps/plan/AddPlan"));
+const AddPlanBenefits = lazy(() =>
+  import("./views/apps/planBenefits/AddPlanBenefits")
+);
+const EditPlanBenefit = lazy(() =>
+  import("./views/apps/planBenefits/EditPlanBenefit")
+);
+const ViewPalnBenefits = lazy(() =>
+  import("./views/apps/planBenefits/ViewPalnBenefits")
+);
 const EditCreatedPlan = lazy(() =>
   import("./views/apps/plans/EditCreatedPlan")
 );
@@ -162,6 +172,9 @@ const EditPolicyType = lazy(() =>
 );
 const AddPolicy = lazy(() => import("./views/apps/policy/AddPolicy"));
 const PolicyList = lazy(() => import("./views/apps/policy/PolicyList"));
+const EditPolicy = lazy(() => import("./views/apps/policy/EditPolicy"));
+const ViewPolicy = lazy(() => import("./views/apps/policy/ViewPolicy"));
+
 const CashEquity = lazy(() => import("./views/apps/scripts/CashEquity"));
 const AddCashEquity = lazy(() => import("./views/apps/scripts/AddCashEqutiy"));
 const EditCash = lazy(() => import("./views/apps/scripts/EditCash"));
@@ -609,7 +622,19 @@ class AppRouter extends React.Component {
             {/* createPlan */}
             <AppRoute path="/app/plan/CreatePlan" component={CreatePlan} />
             <AppRoute
-              path="/app/plans/CreatedPlanList"
+              path="/app/plan/AddPlanBenefits"
+              component={AddPlanBenefits}
+            />
+            <AppRoute
+              path="/app/plan/EditPlanBenefit/:id"
+              component={EditPlanBenefit}
+            />
+            <AppRoute
+              path="/app/plan/ViewPalnBenefits/:id"
+              component={ViewPalnBenefits}
+            />
+            <AppRoute
+              path="/app/plans/PlanBenefitList"
               component={CreatedPlanList}
             />
             <AppRoute
@@ -639,6 +664,10 @@ class AppRouter extends React.Component {
             />
             <AppRoute path="/app/claims/ViewClaims" component={ViewClaims} />
             <AppRoute path="/app/plan/AddPlanType" component={AddPlanType} />
+            <AppRoute
+              path="/app/plan/EditPlanType/:id"
+              component={EditPlanType}
+            />
             <AppRoute path="/app/plan/PlanTypeList" component={PlanTypeList} />
             <AppRoute
               path="/app/policy/PolicyTypeList"
@@ -654,6 +683,14 @@ class AppRouter extends React.Component {
             />
             <AppRoute path="/app/policy/AddPolicy" component={AddPolicy} />
             <AppRoute path="/app/policy/PolicyList" component={PolicyList} />
+            <AppRoute
+              path="/app/policy/EditPolicy/:id"
+              component={EditPolicy}
+            />
+            <AppRoute
+              path="/app/policy/ViewPolicy/:id"
+              component={ViewPolicy}
+            />
             {/* AgentList */}
             <AppRoute path="/app/agent/AgentList" component={AgentList} />
             <AppRoute path="/app/agent/AddAgent" component={AddAgent} />

@@ -15,12 +15,18 @@ import {
 import ReactHtmlParser from "react-html-parser";
 import { Route } from "react-router-dom";
 import axiosConfig from "../../../../axiosConfig";
-import { EditorState, convertToRaw } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "../../../../assets/scss/plugins/extensions/editor.scss";
 import swal from "sweetalert";
+
+import {
+  ContentState,
+  EditorState,
+  convertFromHTML,
+  convertToRaw,
+} from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import draftToHtml from "draftjs-to-html";
 export default class EditAboutUs extends Component {
   constructor(props) {
     super(props);
@@ -37,8 +43,15 @@ export default class EditAboutUs extends Component {
       .get(`/admin/getone_aboutus/${id}`)
       .then((response) => {
         console.log(response.data.data.desc);
+        const description = response.data.data.desc;
+        const contentState = ContentState.createFromBlockArray(
+          convertFromHTML(description)
+        );
+        // Create EditorState with ContentState
+        const editorState = EditorState.createWithContent(contentState);
         this.setState({
-          desc: response.data.data.desc,
+          desc: description,
+          editorState: editorState,
         });
       })
       .catch((error) => {
@@ -87,7 +100,6 @@ export default class EditAboutUs extends Component {
         <Card>
           <Row className="m-2">
             <Col>
-              {/* <span>{ReactHtmlParser(params.data.desc)}</span> */}
               <h1 col-sm-6 className="float-left">
                 Edit AboutUs
               </h1>
@@ -117,6 +129,7 @@ export default class EditAboutUs extends Component {
                   editorClassName="demo-editor"
                   editorState={this.state.editorState}
                   onEditorStateChange={this.onEditorStateChange}
+                  defaultContentState={ReactHtmlParser(this.state.desc)}
                   toolbar={{
                     options: ["inline", "blockType", "fontSize", "fontFamily"],
                     inline: {
