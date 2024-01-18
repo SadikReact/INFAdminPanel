@@ -199,7 +199,9 @@ export default class EditProfile extends Component {
             <Col>
               <Button
                 className=" btn btn-danger float-right"
-                onClick={() => history.push("/app/store/storesRequest/storesRequestList")}
+                onClick={() =>
+                  history.push("/app/store/storesRequest/storesRequestList")
+                }
               >
                 Back
               </Button>

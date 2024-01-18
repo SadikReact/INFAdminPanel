@@ -42,6 +42,39 @@ class PlanDetailList extends React.Component {
         filter: true,
       },
       {
+        headerName: "Actions",
+        field: "sortorder",
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="actions cursor-pointer">
+              <Route
+                render={({ history }) => (
+                  <Edit
+                    className="mr-50"
+                    size="25px"
+                    color="blue"
+                    onClick={() =>
+                      history.push({
+                        pathname: `/app/plans/EditPlanDetail/${params.data._id}`,
+                        state: params.data,
+                      })
+                    }
+                  />
+                )}
+              />
+              <Trash2
+                size={25}
+                color="red"
+                onClick={() => {
+                  this.runthisfunction(params.data._id);
+                }}
+              />
+            </div>
+          );
+        },
+      },
+      {
         headerName: "Plan Name",
         field: "planname",
         width: 200,
@@ -194,39 +227,6 @@ class PlanDetailList extends React.Component {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <span>{ReactHtmlParser(params.data.short_desc)}</span>
-            </div>
-          );
-        },
-      },
-
-      {
-        headerName: "Actions",
-        field: "sortorder",
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="actions cursor-pointer">
-              <Route
-                render={({ history }) => (
-                  <Edit
-                    className="mr-50"
-                    size="25px"
-                    color="blue"
-                    onClick={() =>
-                      history.push(
-                        `/app/plans/EditPlanDetail/${params.data._id}`
-                      )
-                    }
-                  />
-                )}
-              />
-              <Trash2
-                size={20}
-                color="red"
-                onClick={() => {
-                  this.runthisfunction(params.data._id);
-                }}
-              />
             </div>
           );
         },

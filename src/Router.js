@@ -7,8 +7,8 @@ import Spinner from "./components/@vuexy/spinner/Loading-spinner";
 import knowledgeBaseCategory from "./views/pages/knowledge-base/Category";
 import knowledgeBaseQuestion from "./views/pages/knowledge-base/Questions";
 import { ContextLayout } from "./utility/context/Layout";
+import EditPlanType from "./views/apps/plan/EditPlanType";
 
-// Route-based code splitting
 const analyticsDashboard = lazy(() =>
   import("./views/dashboard/analytics/AnalyticsDashboard")
 );
@@ -30,7 +30,11 @@ const FeedBackList = lazy(() => import("./views/apps/feedback/FeedBackList"));
 const ViewFeedback = lazy(() => import("./views/apps/feedback/ViewFeedback"));
 
 //pageSetUp//
-const aboutUs = lazy(() => import("./views/apps/pageSetUp/about/AboutUs"));
+const ContactUsList = lazy(() =>
+  import("./views/apps/contactUs/ContactUsList")
+);
+const AddContactUs = lazy(() => import("./views/apps/contactUs/AddContactUs"));
+const AboutUs = lazy(() => import("./views/apps/pageSetUp/about/AboutUs"));
 const AllaboutUs = lazy(() =>
   import("./views/apps/pageSetUp/about/AllaboutUs")
 );
@@ -117,9 +121,18 @@ const EditPlan = lazy(() => import("./views/apps/plans/EditPlan"));
 
 // create Plan
 const CreatedPlanList = lazy(() =>
-  import("./views/apps/plans/CreatedPlanList")
+  import("./views/apps/plan/PlanBenefitsList")
 );
-const CreatePlan = lazy(() => import("./views/apps/plans/CreatePlan"));
+const CreatePlan = lazy(() => import("./views/apps/plan/AddPlan"));
+const AddPlanBenefits = lazy(() =>
+  import("./views/apps/planBenefits/AddPlanBenefits")
+);
+const EditPlanBenefit = lazy(() =>
+  import("./views/apps/planBenefits/EditPlanBenefit")
+);
+const ViewPalnBenefits = lazy(() =>
+  import("./views/apps/planBenefits/ViewPalnBenefits")
+);
 const EditCreatedPlan = lazy(() =>
   import("./views/apps/plans/EditCreatedPlan")
 );
@@ -145,9 +158,22 @@ const AddAgent = lazy(() => import("./views/apps/agent/AddAgent"));
 const EditAgent = lazy(() => import("./views/apps/agent/EditAgent"));
 // Apply
 const VisitorList = lazy(() => import("./views/apps/apply/VisitorList"));
-
-// const AddFnoIndex = lazy(() => import("./views/apps/trade/AddFnoIndex"));
-// const EditFnoIndex = lazy(() => import("./views/apps/trade/EditFnoIndex"));
+// policy
+const PlanTypeList = lazy(() => import("./views/apps/plan/PlanTypeList"));
+const AddPlanType = lazy(() => import("./views/apps/plan/AddPlanType"));
+const PolicyTypeList = lazy(() =>
+  import("./views/apps/policy/policyType/PolicyTypeList")
+);
+const AddPolicyType = lazy(() =>
+  import("./views/apps/policy/policyType/AddPolicyType")
+);
+const EditPolicyType = lazy(() =>
+  import("./views/apps/policy/policyType/EditPolicyType")
+);
+const AddPolicy = lazy(() => import("./views/apps/policy/AddPolicy"));
+const PolicyList = lazy(() => import("./views/apps/policy/PolicyList"));
+const EditPolicy = lazy(() => import("./views/apps/policy/EditPolicy"));
+const ViewPolicy = lazy(() => import("./views/apps/policy/ViewPolicy"));
 
 const CashEquity = lazy(() => import("./views/apps/scripts/CashEquity"));
 const AddCashEquity = lazy(() => import("./views/apps/scripts/AddCashEqutiy"));
@@ -254,9 +280,6 @@ const ViewStartUp = lazy(() =>
 
 const RefferEarn = lazy(() => import("./views/apps/explore/Trupee/RefferEarn"));
 
-// const TradingViewCharts = lazy(() =>
-//   import("./views/apps/explore/Trupee/TradingViewCharts")
-// );
 const PerformanceSheet = lazy(() =>
   import("./views/apps/explore/Trupee/PerformanceSheet")
 );
@@ -273,15 +296,13 @@ const Editopportunity = lazy(() =>
   import("./views/apps/explore/Trupee/Editopportunity")
 );
 const AddOppor = lazy(() => import("./views/apps/explore/Trupee/AddOppor"));
-// TradingViewCharts
+
 const TradingViewCharts = lazy(() =>
   import("./views/apps/explore/Trupee/TradingViewCharts")
 );
 const AddTVC = lazy(() => import("./views/apps/explore/Trupee/AddTVC"));
 const EditTVC = lazy(() => import("./views/apps/explore/Trupee/EditTVC"));
-// const RefferEarn = lazy(() => import("./views/apps/explore/Trupee/RefferEarn"));
 
-// MemberShipContent//
 const MemberShipContent = lazy(() =>
   import("./views/apps/membercontent/MemberShipContent")
 );
@@ -601,7 +622,19 @@ class AppRouter extends React.Component {
             {/* createPlan */}
             <AppRoute path="/app/plan/CreatePlan" component={CreatePlan} />
             <AppRoute
-              path="/app/plans/CreatedPlanList"
+              path="/app/plan/AddPlanBenefits"
+              component={AddPlanBenefits}
+            />
+            <AppRoute
+              path="/app/plan/EditPlanBenefit/:id"
+              component={EditPlanBenefit}
+            />
+            <AppRoute
+              path="/app/plan/ViewPalnBenefits/:id"
+              component={ViewPalnBenefits}
+            />
+            <AppRoute
+              path="/app/plans/PlanBenefitList"
               component={CreatedPlanList}
             />
             <AppRoute
@@ -630,6 +663,34 @@ class AppRouter extends React.Component {
               component={EditPlanDetail}
             />
             <AppRoute path="/app/claims/ViewClaims" component={ViewClaims} />
+            <AppRoute path="/app/plan/AddPlanType" component={AddPlanType} />
+            <AppRoute
+              path="/app/plan/EditPlanType/:id"
+              component={EditPlanType}
+            />
+            <AppRoute path="/app/plan/PlanTypeList" component={PlanTypeList} />
+            <AppRoute
+              path="/app/policy/PolicyTypeList"
+              component={PolicyTypeList}
+            />
+            <AppRoute
+              path="/app/policy/AddPolicyType"
+              component={AddPolicyType}
+            />
+            <AppRoute
+              path="/app/policy/EditPolicyType/:id"
+              component={EditPolicyType}
+            />
+            <AppRoute path="/app/policy/AddPolicy" component={AddPolicy} />
+            <AppRoute path="/app/policy/PolicyList" component={PolicyList} />
+            <AppRoute
+              path="/app/policy/EditPolicy/:id"
+              component={EditPolicy}
+            />
+            <AppRoute
+              path="/app/policy/ViewPolicy/:id"
+              component={ViewPolicy}
+            />
             {/* AgentList */}
             <AppRoute path="/app/agent/AgentList" component={AgentList} />
             <AppRoute path="/app/agent/AddAgent" component={AddAgent} />
@@ -838,11 +899,19 @@ class AppRouter extends React.Component {
               component={productDetail}
             />
             {/* pageSetUp */}
-            <AppRoute path="/app/pageSetUp/about/aboutUs" component={aboutUs} />
+            <AppRoute
+              path="/app/ContactUs/addContactUs"
+              component={AddContactUs}
+            />
+            <AppRoute
+              path="/app/ContactUs/ContactUsList"
+              component={ContactUsList}
+            />
             <AppRoute
               path="/app/pageSetUp/about/AllaboutUs"
               component={AllaboutUs}
             />
+            <AppRoute path="/app/about/aboutUs" component={AboutUs} />
             <AppRoute
               path="/app/pageSetUp/about/EditAboutUs/:id"
               component={EditAboutUs}

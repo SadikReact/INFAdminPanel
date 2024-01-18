@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { Disc, X, Circle } from "react-feather";
 import classnames from "classnames";
-import logo from "../../../../assets/img/logo/logo.png";
+import logo from "../../../../assets/img/logo/inf-logo.png";
 class SidebarHeader extends Component {
   render() {
     let {
@@ -20,11 +20,14 @@ class SidebarHeader extends Component {
             <NavLink to="/" className="navbar-brand">
               <div className="">
                 <img
+                  className="logo"
                   src={logo}
                   alt="logo"
-                  width="120px"
-                  style={{ width: "150" }}
+                  height="40px"
+                  width="100px"
+                  style={{ marginLeft: "50px" }}
                 />
+                {/* <img src={logo} alt="logo" width="100px" height={46} /> */}
               </div>
 
               {/* <h2 className="brand-text mb-0">TRUPEE</h2> */}

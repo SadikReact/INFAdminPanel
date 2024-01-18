@@ -32,14 +32,19 @@ class LoginJWT extends React.Component {
     await axiosConfig
       .post(`/admin/varify-otp/${adminId}`, payload)
       .then((res) => {
-        localStorage.setItem("ad-token", res.data.token);
-        console.log(res);
-        console.log(res.data.token);
-        swal("Submittted Successfully");
-        window.location.replace("/dashboard");
+        if (res.status == 200) {
+          localStorage.setItem("ad-token", res.data.token);
+          localStorage.setItem("AdminData", JSON.stringify(res.data));
+          swal("Submittted Successfully");
+          window.location.replace("/#");
+        } else if (res.status == 204) {
+          swal("Something Went wrong");
+        } else {
+          swal("Something Went wrong");
+        }
       })
       .catch((err) => {
-        console.log(err);
+        swal("Invalid OTP");
       });
   };
   handlechange = (e) => {
@@ -56,22 +61,27 @@ class LoginJWT extends React.Component {
     axiosConfig
       .post("/admin/adminlogin", payload)
       .then((response) => {
+        debugger
+        console.log(response)
         if (response.status === 200) {
-          localStorage.setItem("userData", response.data.data);
-          this.setState({ ShowScreen: true });
+          // this.setState({ ShowScreen: true });
+          localStorage.setItem("ad-token", response.data.token);
+          localStorage.setItem("AdminData", JSON.stringify(response.data));
           localStorage.setItem("userId", response.data.data._id);
-          swal("OTP has been sent to Your Mail Id", "Please Check and verify");
-        } else if (response.data.status === 204) {
-          console.log(response.data);
-          swal(response.data.msg);
+          window.location.replace("/#");
+          swal("Login Successfully");
+          // swal("OTP has been sent to Your Mail Id", "Please Verify OTP");
+        } else if (response.status === 204 || response.status === 400) {
+          swal("Some Thing went Wrong");
+        } else {
+          swal("Some Thing went Wrong");
         }
       })
 
       .catch((error) => {
-        console.log(error);
         swal(
           "error!",
-          "Invalied! Please enter valied Email. or Password",
+          "Invalied! Please Enter Valid Email. or Password",
           "error"
         );
       });
@@ -80,7 +90,7 @@ class LoginJWT extends React.Component {
     return (
       <React.Fragment>
         <CardBody className="pt-1">
-          {this.state.ShowScreen ? (
+          {/* {this.state.ShowScreen ? (
             <>
               <OtpInput
                 containerStyle="true inputdata"
@@ -93,15 +103,17 @@ class LoginJWT extends React.Component {
                 renderSeparator={<span>-</span>}
                 renderInput={(props) => <input className="inputs" {...props} />}
               />
-              <Button
-                className="m-4"
-                onClick={this.handleSubmitOTP}
-                color="primary"
-              >
-                Verify OTP
-              </Button>
+              <div className="float-md-right d-block my-2">
+                <Button
+                  onClick={this.handleSubmitOTP}
+                  color="primary"
+                  className="px-75 btn-block"
+                >
+                  Verify OTP
+                </Button>
+              </div>
             </>
-          ) : (
+          ) : ( */}
             <>
               <Form onSubmit={this.handleLogin}>
                 <FormGroup className="form-label-group position-relative has-icon-left">
@@ -111,7 +123,7 @@ class LoginJWT extends React.Component {
                     placeholder="E-mail "
                     value={this.state.email}
                     onChange={this.handlechange}
-                    // required
+                    required
                   />
                   <div className="form-control-position">
                     <Mail size={15} />
@@ -125,7 +137,7 @@ class LoginJWT extends React.Component {
                     placeholder="Password"
                     value={this.state.password}
                     onChange={this.handlechange}
-                    // required
+                    required
                   />
                   <div className="form-control-position">
                     <Lock size={15} />
@@ -156,7 +168,7 @@ class LoginJWT extends React.Component {
                 </div>
               </Form>
             </>
-          )}
+          {/* )} */}
         </CardBody>
       </React.Fragment>
     );

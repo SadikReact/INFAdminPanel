@@ -13,7 +13,6 @@ import {
 } from "reactstrap";
 import { Route } from "react-router-dom";
 import { AgGridReact } from "ag-grid-react";
-// import { history } from "../../../history";
 import axiosConfig from "../../../../axiosConfig";
 import { ChevronDown, Edit, Trash2 } from "react-feather";
 import { ContextLayout } from "../../../../utility/context/Layout";
@@ -39,39 +38,20 @@ class AllaboutUs extends React.Component {
         field: "node.rowIndex + 1",
         width: 100,
         filter: true,
-        // checkboxSelection: true,
-        // headerCheckboxSelectionFilteredOnly: true,
-        // headerCheckboxSelection: true,
       },
       {
         headerName: "Descriptions",
         field: "desc",
-        width: 200,
+        width: 250,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span className="mt-1">{ReactHtmlParser(params.data.desc)}</span>
+              <span className="">{ReactHtmlParser(params.data.desc)}</span>
             </div>
           );
         },
       },
-      // {
-      //   headerName: "Status",
-      //   field: "userverified",
-      //   // filter: true,
-      //   width: 150,
-      //   cellRendererFramework: (params) => {
-      //     return params.value === "Active" ? (
-      //       <div className="badge badge-pill badge-success">
-      //         {params.data.userverified}
-      //       </div>
-      //     ) : params.value === "Inactive" ? (
-      //       <div className="badge badge-pill badge-warning">
-      //         {params.data.userverified}
-      //       </div>
-      //     ) : null;
-      //   },
-      // },
+
       {
         headerName: "Actions",
         field: "sortorder",
@@ -120,6 +100,7 @@ class AllaboutUs extends React.Component {
   };
 
   runthisfunction(id) {
+    console.log(id);
     swal(
       `Do You Want To Delete Permanently`,
       "This item will be deleted immediately",
@@ -135,7 +116,7 @@ class AllaboutUs extends React.Component {
         case "cancel":
           break;
         case "catch":
-          axiosConfig.get(`/admin/dlt_abtus/${id}`).then((response) => {
+          axiosConfig.delete(`/admin/dlt_abtus/${id}`).then((response) => {
             this.allAboutList();
           });
           break;
@@ -179,20 +160,21 @@ class AllaboutUs extends React.Component {
                 AboutUs List
               </h1>
             </Col>
-          </Row>
-          <Col className="pt-4">
-            {/* <Route
+            <Col className="">
+              <Route
                 render={({ history }) => (
                   <Button
-                    className=" btn btn-success float-right"
-                    onClick={() =>
-                      history.push("/app/about/AboutUs")}
+                    className=" btn  float-right"
+                    color="primary"
+                    onClick={() => history.push("/app/about/aboutUs")}
                   >
                     Add Aboutus
-                    </Button>
+                  </Button>
                 )}
-              /> */}
-          </Col>
+              />
+            </Col>
+          </Row>
+
           <CardBody className="py-0">
             {this.state.rowData === null ? null : (
               <div className="ag-theme-material w-100 my-2 ag-grid-table">

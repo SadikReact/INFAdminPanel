@@ -34,84 +34,9 @@ class PlanList extends React.Component {
 
     columnDefs: [
       {
-        headerName: "S.No",
-        valueGetter: "node.rowIndex + 1",
-        field: "node.rowIndex + 1",
-        width: 100,
-        filter: true,
-        // checkboxSelection: true,
-        // headerCheckboxSelectionFilteredOnly: true,
-        // headerCheckboxSelection: true,
-      },
-      {
-        headerName: "Start Date",
-        field: "StartDate",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.scriptName}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "End Date",
-        field: "EndDate",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.scriptName}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Coverage Area",
-        field: "Coverage",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.scriptName}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Maximum",
-        field: "Maximum",
-        width: 150,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.scriptName}</span>
-            </div>
-          );
-        },
-      },
-      // {
-      //   headerName: "Status",
-      //   field: "status",
-      //   filter: true,
-      //   width: 250,
-      //   cellRendererFramework: (params) => {
-      //     return params.value === "Active" ? (
-      //       <div className="badge badge-pill badge-success">
-      //         {params.data.status}
-      //       </div>
-      //     ) : params.value === "Deactive" ? (
-      //       <div className="badge badge-pill badge-warning">
-      //         {params.data.status}
-      //       </div>
-      //     ) : null;
-      //   },
-      // },
-      {
         headerName: "Actions",
         field: "sortorder",
-        width: 250,
+        width: 200,
         // pinned: window.innerWidth > 992 ? "right" : false,
         cellRendererFramework: (params) => {
           return (
@@ -131,7 +56,7 @@ class PlanList extends React.Component {
                     size="25px"
                     color="blue"
                     onClick={() =>
-                      history.push(`/app/scripts/editOption/${params.data._id}`)
+                      history.push(`/app/plans/editPlan/${params.data._id}`)
                     }
                   />
                 )}
@@ -141,28 +66,244 @@ class PlanList extends React.Component {
                 size={20}
                 color="red"
                 onClick={() => {
-                  // let selectedData = this.gridApi.getSelectedRows();
                   this.runthisfunction(params.data._id);
-                  // this.gridApi.updateRowData({ remove: selectedData });
                 }}
               />
             </div>
           );
         },
       },
+      {
+        headerName: "plan_combination_ID",
+        valueGetter: "node.rowIndex + 1",
+        field: "node.rowIndex + 1",
+        width: 250,
+        filter: true,
+      },
+      {
+        headerName: "policy_num",
+        field: "EndDate",
+        width: 250,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params?.data?.policy_ID_fk?.policyNum}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "planMinDays",
+        field: "planMinDays",
+        width: 250,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data.planMinDays}</span>
+            </div>
+          );
+        },
+      },
+
+      {
+        headerName: "planType",
+        field: "Insurgeon",
+        filter: true,
+        width: 200,
+        valueFormatter: (params) => {
+          if (params?.data.planType) {
+            return params.data.planType?.map((ele) => ele?.name).join(", ");
+          }
+          return null;
+        },
+      },
+      {
+        headerName: "agesupportMin",
+        field: "agesupportMin",
+        width: 250,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data.agesupportMin}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "agesupportMax",
+        field: "agesupportMax",
+        width: 250,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data.agesupportMax}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "planMaximum",
+        field: "planMaximum",
+        width: 250,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data.planMaximum}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "planDeductible",
+        field: "Maximum",
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data.planDeductible}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "preexCoverage",
+        field: "preexCoverage",
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data?.preexCoverage}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "preexDeductible",
+        field: "preexDeductible",
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data.preexDeductible}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "preexMaxCoverage",
+        field: "preexMaxCoverage",
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data.preexMaxCoverage}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "CoverageCntry",
+        field: "Maximum",
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data.CoverageCntry}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "policy_ID_fk",
+        field: "policy_ID_fk",
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data?.policy_ID_fk?._id}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "policyName_fk",
+        field: "Maximum",
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data?.policy_ID_fk?.policyName}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "policyActive_fk",
+        field: "Maximum",
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data?.policy_ID_fk?.policyName}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "planBenefitsCode_fk",
+        field: "Maximum",
+        width: 250,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data?.planBenefitsCode_fk?._id}</span>
+            </div>
+          );
+        },
+      },
+      // {
+      //   headerName: "policy_combination_active",
+      //   field: "Maximum",
+      //   width: 250,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <span>{params.data.preexDeductible}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Status",
+      //   field: "status",
+      //   filter: true,
+      //   width: 250,
+      //   cellRendererFramework: (params) => {
+      //     return params.value === "Active" ? (
+      //       <div className="badge badge-pill badge-success">
+      //         {params.data.status}
+      //       </div>
+      //     ) : params.value === "Deactive" ? (
+      //       <div className="badge badge-pill badge-warning">
+      //         {params.data.status}
+      //       </div>
+      //     ) : null;
+      //   },
+      // },
     ],
   };
 
-  //   componentDidMount() {
-  //     this.getOptionDataList();
-  //   }
+  componentDidMount() {
+    this.getOptionDataList();
+  }
 
-  //   getOptionDataList = () => {
-  //     axiosConfig.get(`/admin/getEquityScript`).then((response) => {
-  //       const rowData = response.data.data;
-  //       this.setState({ rowData });
-  //     });
-  //   };
+  getOptionDataList = () => {
+    axiosConfig.get(`/plan/view-plan`).then((response) => {
+      // const rowData = response.data.data;
+      console.log(response.data.Plan);
+      this.setState({ rowData: response.data.Plan });
+    });
+  };
   runthisfunction(id) {
     swal(
       `Do You Want To Delete Permanently`,

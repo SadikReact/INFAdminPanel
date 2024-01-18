@@ -66,8 +66,9 @@ export default class EditOption extends Component {
       .post(`/admin/edit_infPlan/${id}`, this.state)
       .then((response) => {
         console.log(response);
-        // this.setState({ scriptName: "" });
+        this.setState({ planName: "", desc: "" });
         swal("Success!", "Submitted SuccessFull!", "success");
+        this.props.history.push("/app/plans/CreatedPlanList");
       })
       .catch((error) => {
         console.log(error);
