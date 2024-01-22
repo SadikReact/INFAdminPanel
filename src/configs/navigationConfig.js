@@ -90,6 +90,7 @@ const navigationConfig = [
     permissions: ["admin", "editor"],
     navLink: "/app/plan/PlanTypeList",
   },
+
   {
     id: "plans",
     title: "Plans List",
@@ -97,6 +98,14 @@ const navigationConfig = [
     icon: <Icon.ArrowRight size={12} />,
     permissions: ["admin", "editor"],
     navLink: "/app/plans/PlanList",
+  },
+  {
+    id: "plansprice",
+    title: "PlanPrice",
+    type: "item",
+    icon: <Icon.ArrowRight size={12} />,
+    permissions: ["admin", "editor"],
+    navLink: "/app/plan/ListPlanPrice",
   },
 
   {

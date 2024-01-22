@@ -115,10 +115,8 @@ class AddPolicy extends React.Component {
     axiosConfig
       .post(`/admin/add_policy/${adminId}`, formdata)
       .then((response) => {
-        debugger;
         console.log(response);
         swal("Success!", "Submitted SuccessFull!", "success");
-        // this.setState({ desc: "" });
         this.props.history.push("/app/policy/PolicyList");
       })
       .catch((error) => {
