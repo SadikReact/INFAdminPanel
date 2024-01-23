@@ -53,9 +53,6 @@ const AddTermsCondition = lazy(() =>
 const EditTermCondition = lazy(() =>
   import("./views/apps/pageSetUp/termscondition/EditTermCondition")
 );
-// const EditTermCondition1 = lazy(() =>
-//   import("./views/apps/pageSetUp")
-// );
 const helpUs = lazy(() => import("./views/apps/pageSetUp/helpUs/HelpUS"));
 const EdithelpusForm = lazy(() =>
   import("./views/apps/pageSetUp/helpUs/EdithelpusForm")
@@ -159,6 +156,8 @@ const EditAgent = lazy(() => import("./views/apps/agent/EditAgent"));
 // Apply
 const VisitorList = lazy(() => import("./views/apps/apply/VisitorList"));
 // policy
+const AddPlanPrice = lazy(() => import("./views/apps/planPrice/AddPlanPrice"));
+const ListPlanPrice = lazy(() => import("./views/apps/planPrice/ListPlanPrice"));
 const PlanTypeList = lazy(() => import("./views/apps/plan/PlanTypeList"));
 const AddPlanType = lazy(() => import("./views/apps/plan/AddPlanType"));
 const PolicyTypeList = lazy(() =>
@@ -664,6 +663,8 @@ class AppRouter extends React.Component {
             />
             <AppRoute path="/app/claims/ViewClaims" component={ViewClaims} />
             <AppRoute path="/app/plan/AddPlanType" component={AddPlanType} />
+            <AppRoute path="/app/plan/AddplanPrice" component={AddPlanPrice} />
+            <AppRoute path="/app/plan/ListPlanPrice" component={ListPlanPrice} />
             <AppRoute
               path="/app/plan/EditPlanType/:id"
               component={EditPlanType}

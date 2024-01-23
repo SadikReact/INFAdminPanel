@@ -34,11 +34,13 @@ export default class AddPlan extends Component {
       CoverageCntry: "",
       policy_combination_active: "",
       selectedValue: "",
-      list: [{ name: "BASIC" }, { name: "PRE-EX" }],
+      // list: [{ name: "BASIC" }, { name: "PRE-EX" }],
+      list: [],
       planBenefitsCode_fk: "",
       policy_ID_fk: "",
       planBenefitsList: [],
       policyList: [],
+      error: "",
     };
     this.onSelect = this.onSelect.bind(this);
     this.onRemove = this.onRemove.bind(this);
@@ -49,8 +51,19 @@ export default class AddPlan extends Component {
   componentDidMount() {
     this.PlanBenefitsList();
     this.AllPolicyList();
+    this.planTypeList();
   }
-
+  planTypeList = () => {
+    axiosConfig
+      .get("/admin/get_plan_typ")
+      .then((response) => {
+        console.log(response.data.data);
+        this.setState({ list: response.data.data });
+      })
+      .catch((err) => {
+        swal("Something Went Wrong");
+      });
+  };
   PlanBenefitsList = () => {
     axiosConfig.get("/benefite/view-benefite").then((response) => {
       this.setState({ planBenefitsList: response.data.Benefite });
@@ -62,11 +75,10 @@ export default class AddPlan extends Component {
     });
   };
   changeHandler = (e) => {
-    // console.log([e.target.name], e.target.value);
     this.setState({ [e.target.name]: e.target.value });
   };
   onSelect(selectedList, selectedItem) {
-    console.log(selectedList);
+    console.log(selectedList.length);
     this.setState({ planType: selectedList });
   }
   handlePlanBenefits = (e) => {
@@ -81,6 +93,7 @@ export default class AddPlan extends Component {
 
   submitHandler = (e) => {
     e.preventDefault();
+    console.log(this.state.error);
     const payload = {
       planMinDays: this.state.planMinDays,
       planType: this.state.planType,
@@ -95,7 +108,10 @@ export default class AddPlan extends Component {
       preexDeductible: this.state.preexDeductible,
       // policy_combination_active: this.state.preexCoverage,
       policy_ID_fk: this.state.policy_ID_fk,
+      status: this.state.status,
     };
+    console.log(payload);
+
     axiosConfig
       .post("/plan/save-plan", payload)
       .then((response) => {
@@ -105,6 +121,7 @@ export default class AddPlan extends Component {
       .catch((error) => {
         console.log(error);
       });
+    // }
   };
 
   render() {
@@ -153,6 +170,7 @@ export default class AddPlan extends Component {
                   <FormGroup>
                     <Input
                       type="select"
+                      required
                       id="data-category"
                       name="planMinDays"
                       value={this.state.planMinDays}
@@ -177,8 +195,9 @@ export default class AddPlan extends Component {
                     selectedValues={this.state.selectedValue}
                     onSelect={this.onSelect}
                     onRemove={this.onRemove}
-                    displayValue="name"
+                    displayValue="plan_type"
                   />
+                  <span style={{ color: "red" }}>{this.state.error}</span>
                 </Col>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label>AgesupportMin</Label>
@@ -220,6 +239,7 @@ export default class AddPlan extends Component {
                     <Input
                       type="select"
                       id="data-category"
+                      required
                       name="planDeductible"
                       value={this.state.planDeductible}
                       onChange={this.handlePlanBenefits}
@@ -248,6 +268,7 @@ export default class AddPlan extends Component {
                     <Input
                       type="select"
                       id="data-category"
+                      required
                       name="preexCoverage"
                       value={this.state.preexCoverage}
                       onChange={this.handlePlanBenefits}
@@ -268,6 +289,7 @@ export default class AddPlan extends Component {
                   <FormGroup>
                     <Input
                       type="select"
+                      required
                       id="data-category"
                       name="policy_ID_fk"
                       value={this.state.policy_ID_fk}
@@ -291,6 +313,7 @@ export default class AddPlan extends Component {
                     <Input
                       type="select"
                       id="data-category"
+                      required
                       name="planBenefitsCode_fk"
                       value={this.state.planBenefitsCode_fk}
                       onChange={this.handlePlanBenefits}
@@ -315,6 +338,7 @@ export default class AddPlan extends Component {
                     <Input
                       type="select"
                       id="data-category"
+                      required
                       name="preexDeductible"
                       value={this.state.preexDeductible}
                       onChange={this.handlePlanBenefits}
@@ -359,6 +383,29 @@ export default class AddPlan extends Component {
                     value={this.state.CoverageCntry}
                     onChange={this.changeHandler}
                   ></Input>
+                </Col>
+                <Col lg="6" md="6" sm="6" className="mb-2">
+                  <Label className="mb-1">Status</Label>
+                  <div
+                    className="form-label-group"
+                    onChange={(e) => this.changeHandler1(e)}
+                  >
+                    <input
+                      style={{ marginRight: "3px" }}
+                      type="radio"
+                      name="status"
+                      value="true"
+                    />
+                    <span style={{ marginRight: "20px" }}>Active</span>
+
+                    <input
+                      style={{ marginRight: "3px" }}
+                      type="radio"
+                      name="status"
+                      value="false"
+                    />
+                    <span style={{ marginRight: "3px" }}>Deactive</span>
+                  </div>
                 </Col>
               </Row>
               <Row>

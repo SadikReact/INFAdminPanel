@@ -17,7 +17,7 @@ import { history } from "../../../history";
 import swal from "sweetalert";
 import { Route } from "react-router-dom";
 import Multiselect from "multiselect-react-dropdown";
-
+let planTypeList = "";
 export default class EditPlan extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +39,7 @@ export default class EditPlan extends Component {
       policy_ID_fk: "",
       planBenefitsList: [],
       policyList: [],
-      planView:"",
+      planView: "",
     };
     this.onSelect = this.onSelect.bind(this);
     this.onRemove = this.onRemove.bind(this);
@@ -48,7 +48,7 @@ export default class EditPlan extends Component {
     this.setState({ status: e.target.value });
   };
   componentDidMount() {
-   let id =this.props.match.params.id
+    let id = this.props.match.params.id;
     this.PlanBenefitsList();
     this.AllPolicyList();
     this.ViewOne(id);
@@ -60,24 +60,70 @@ export default class EditPlan extends Component {
     });
   };
   AllPolicyList = () => {
-    axiosConfig.get("/admin/get_policies").then((response) => {
-      this.setState({ policyList: response.data.data });
-    }).catch((er)=>{console.log(er)})
+    axiosConfig
+      .get("/admin/get_policies")
+      .then((response) => {
+        this.setState({ policyList: response.data.data });
+      })
+      .catch((er) => {
+        console.log(er);
+      });
   };
   ViewOne = (id) => {
-    axiosConfig.get(`/plan/view-plan-by-id/${id}`).then((response) => {
-    console.log(response.data.Plan)
-      this.setState({ planView: response.data.Plan});
-    }).catch((er)=>{
-    console.log(er)
-    })
+    axiosConfig
+      .get(`/plan/view-plan-by-id/${id}`)
+      .then((response) => {
+        console.log(response.data.Plan);
+        const {
+          planMinDays,
+          preexCoverage,
+          agesupportMin,
+          agesupportMax,
+          planMaximum,
+          preexMaxCoverage,
+          CoverageCntry,
+          planDeductible,
+          policy_ID_fk,
+          planType,
+          planBenefitsCode_fk,
+        } = response.data.Plan;
+        planTypeList = planType.map((el) => el.name);
+        this.setState({
+          planView: response.data.Plan,
+          planMinDays: planMinDays,
+          planType: planTypeList,
+          agesupportMin: agesupportMin,
+          agesupportMax: agesupportMax,
+          planMaximum: planMaximum,
+          planDeductible: planDeductible,
+          preexCoverage: preexCoverage,
+          // preexDeductible: "",
+          preexMaxCoverage: preexMaxCoverage,
+          CoverageCntry: CoverageCntry,
+          // policy_combination_active: "",
+          // selectedValue: "",
+          // list: [{ name: "BASIC" }, { name: "PRE-EX" }],
+          planBenefitsCode_fk: planBenefitsCode_fk?.policyNum,
+          policy_ID_fk: policy_ID_fk?.policyName,
+          // planBenefitsList: [],
+          // policyList: [],
+          // planView:"",
+        });
+      })
+      .catch((er) => {
+        console.log(er);
+      });
   };
   changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
   onSelect(selectedList, selectedItem) {
     console.log(selectedList);
-    this.setState({ planType: selectedList });
+    if (selectedList) {
+      this.setState({ planType: selectedList });
+    } else {
+      this.setState({ planType: planTypeList });
+    }
   }
   handlePlanBenefits = (e) => {
     const { name, value } = e.target;
@@ -188,6 +234,7 @@ export default class EditPlan extends Component {
                     onSelect={this.onSelect}
                     onRemove={this.onRemove}
                     displayValue="name"
+                    defaultValue={this.state.planType}
                   />
                 </Col>
                 <Col lg="6" md="6" sm="6" className="mb-2">
@@ -282,11 +329,8 @@ export default class EditPlan extends Component {
                       name="policy_ID_fk"
                       value={this.state.policy_ID_fk}
                       onChange={this.handlePlanBenefits}
-                      defaultValue=""
+                      defaultValue={this.state.policy_ID_fk}
                     >
-                      <option disabled value="">
-                        Select Policy
-                      </option>
                       {this.state.policyList?.map((val) => {
                         return (
                           <option value={val?._id}>{val?.policyName}</option>
@@ -304,11 +348,8 @@ export default class EditPlan extends Component {
                       name="planBenefitsCode_fk"
                       value={this.state.planBenefitsCode_fk}
                       onChange={this.handlePlanBenefits}
-                      defaultValue=""
+                      defaultValue={this.state.planBenefitsCode_fk}
                     >
-                      <option disabled value="">
-                        Select PlanBenefit
-                      </option>
                       {this.state.planBenefitsList?.map((val) => {
                         return (
                           <option value={val?._id}>
@@ -328,11 +369,8 @@ export default class EditPlan extends Component {
                       name="preexDeductible"
                       value={this.state.preexDeductible}
                       onChange={this.handlePlanBenefits}
-                      defaultValue=""
+                      defaultValue={this.state.preexDeductible}
                     >
-                      <option disabled value="">
-                        Select PreexDeductible
-                      </option>
                       <option value="0">0</option>
                       <option value="75">75</option>
                       <option value="100">100</option>
@@ -370,6 +408,29 @@ export default class EditPlan extends Component {
                     onChange={this.changeHandler}
                   ></Input>
                 </Col>
+                <Col lg="6" md="6" sm="6" className="mb-2">
+                  <Label className="mb-1">Status</Label>
+                  <div
+                    className="form-label-group"
+                    onChange={(e) => this.changeHandler1(e)}
+                  >
+                    <input
+                      style={{ marginRight: "3px" }}
+                      type="radio"
+                      name="status"
+                      value="true"
+                    />
+                    <span style={{ marginRight: "20px" }}>Active</span>
+
+                    <input
+                      style={{ marginRight: "3px" }}
+                      type="radio"
+                      name="status"
+                      value="false"
+                    />
+                    <span style={{ marginRight: "3px" }}>Deactive</span>
+                  </div>
+                </Col>
               </Row>
               <Row>
                 <Col lg="6" md="6" sm="6" className="mb-2">
@@ -378,7 +439,7 @@ export default class EditPlan extends Component {
                     type="submit"
                     className="mr-1 mb-1"
                   >
-                   EditPlan
+                    EditPlan
                   </Button.Ripple>
                 </Col>
               </Row>

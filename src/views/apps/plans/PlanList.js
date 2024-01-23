@@ -107,12 +107,14 @@ class PlanList extends React.Component {
 
       {
         headerName: "planType",
-        field: "Insurgeon",
+        field: "planType",
         filter: true,
         width: 200,
         valueFormatter: (params) => {
-          if (params?.data.planType) {
-            return params.data.planType?.map((ele) => ele?.name).join(", ");
+          if (params?.data?.planType) {
+            return params.data.planType
+              ?.map((ele) => ele?.plan_type)
+              .join(", ");
           }
           return null;
         },
@@ -273,23 +275,23 @@ class PlanList extends React.Component {
       //     );
       //   },
       // },
-      // {
-      //   headerName: "Status",
-      //   field: "status",
-      //   filter: true,
-      //   width: 250,
-      //   cellRendererFramework: (params) => {
-      //     return params.value === "Active" ? (
-      //       <div className="badge badge-pill badge-success">
-      //         {params.data.status}
-      //       </div>
-      //     ) : params.value === "Deactive" ? (
-      //       <div className="badge badge-pill badge-warning">
-      //         {params.data.status}
-      //       </div>
-      //     ) : null;
-      //   },
-      // },
+      {
+        headerName: "Status",
+        field: "status",
+        filter: true,
+        width: 250,
+        cellRendererFramework: (params) => {
+          return params.value === "true" ? (
+            <div className="badge badge-pill badge-success">
+              {params.data.status}
+            </div>
+          ) : params.value === "false" ? (
+            <div className="badge badge-pill badge-warning">
+              {params.data.status}
+            </div>
+          ) : null;
+        },
+      },
     ],
   };
 
@@ -299,14 +301,16 @@ class PlanList extends React.Component {
 
   getOptionDataList = () => {
     axiosConfig.get(`/plan/view-plan`).then((response) => {
-      // const rowData = response.data.data;
-      console.log(response.data.Plan);
-      this.setState({ rowData: response.data.Plan });
+      const updatedPlanList = response.data.Plan?.filter(
+        (st) => st.status === "true"
+      );
+      this.setState({ rowData: updatedPlanList });
+      console.log(updatedPlanList);
     });
   };
   runthisfunction(id) {
     swal(
-      `Do You Want To Delete Permanently`,
+      `Do You Want To Delete`,
       "This item will be deleted immediately",
 
       {
@@ -320,7 +324,7 @@ class PlanList extends React.Component {
         case "cancel":
           break;
         case "catch":
-          axiosConfig.get(`/admin/dltEquityScript/${id}`).then((response) => {
+          axiosConfig.delete(`/plan/delete-plan/${id}`).then((response) => {
             this.getOptionDataList();
           });
           break;

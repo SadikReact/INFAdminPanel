@@ -85,7 +85,8 @@ class AddPolicy extends React.Component {
     this.setState({ policyType: e.target.value });
   };
   handleImage = (e) => {
-    this.setState({ plan_image: e.target.files[0] });
+    // const { files,value,name} = e.target;
+    this.setState({ [e.target.name]: e.target.files[0] });
   };
   submitHandler = (e) => {
     e.preventDefault();
@@ -114,10 +115,8 @@ class AddPolicy extends React.Component {
     axiosConfig
       .post(`/admin/add_policy/${adminId}`, formdata)
       .then((response) => {
-        debugger;
         console.log(response);
         swal("Success!", "Submitted SuccessFull!", "success");
-        // this.setState({ desc: "" });
         this.props.history.push("/app/policy/PolicyList");
       })
       .catch((error) => {
@@ -248,12 +247,18 @@ class AddPolicy extends React.Component {
                 </Col>
                 <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>Brochure Link </Label>
-                  <Input
+                  {/* <Input
                     type="text"
                     name="brochure_link"
                     placeholder="Brochure Link"
                     value={this.state.brochure_link}
                     onChange={this.changeHandler}
+                  /> */}
+                  <Input
+                    type="file"
+                    name="brochure_link"
+                    accept="application/pdf"
+                    onChange={this.handleImage}
                   />
                 </Col>
                 <Col lg="6" md="6" sm="12" className="mb-2">
@@ -297,6 +302,7 @@ class AddPolicy extends React.Component {
                   <Input
                     type="file"
                     name="plan_image"
+                    // accept="application/pdf"
                     onChange={this.handleImage}
                   />
                 </Col>

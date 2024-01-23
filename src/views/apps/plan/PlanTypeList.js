@@ -103,9 +103,9 @@ class PlanTypeList extends React.Component {
     ],
   };
   componentDidMount() {
-    this.allAboutList();
+    this.planTypeList();
   }
-  allAboutList = () => {
+  planTypeList = () => {
     axiosConfig
       .get("/admin/get_plan_typ")
       .then((response) => {
@@ -135,7 +135,7 @@ class PlanTypeList extends React.Component {
           break;
         case "catch":
           axiosConfig.delete(`/admin/dlt_plantyp/${id}`).then((response) => {
-            this.allAboutList();
+            this.planTypeList();
           });
           break;
         default:
