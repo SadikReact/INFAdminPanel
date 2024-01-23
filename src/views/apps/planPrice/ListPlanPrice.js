@@ -87,7 +87,7 @@ class ListPlanPrice extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params?.data?.policy_ID_fk?.policyNum}</span>
+              <span>{params?.data?.ageMin}</span>
             </div>
           );
         },
@@ -99,44 +99,43 @@ class ListPlanPrice extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.planMinDays}</span>
+              <span>{params.data.ageMax}</span>
             </div>
           );
         },
       },
-
       {
         headerName: "dependentPrice",
-        field: "Insurgeon",
-        filter: true,
-        width: 200,
-        valueFormatter: (params) => {
-          if (params?.data.planType) {
-            return params.data.planType?.map((ele) => ele?.name).join(", ");
-          }
-          return null;
-        },
-      },
-      {
-        headerName: "cansupportCouple",
-        field: "agesupportMin",
+        field: "dependentPrice",
         width: 250,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.agesupportMin}</span>
+              <span>{params.data.dependentPrice}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "cansupportCouple",
+        field: "cansupportCouple",
+        width: 250,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data.cansupportCouple}</span>
             </div>
           );
         },
       },
       {
         headerName: "cansupportChild",
-        field: "agesupportMax",
+        field: "cansupportChild",
         width: 250,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.agesupportMax}</span>
+              <span>{params.data.cansupportChild}</span>
             </div>
           );
         },
@@ -148,55 +147,55 @@ class ListPlanPrice extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.planMaximum}</span>
+              <span>{params.data.IndividualFee}</span>
             </div>
           );
         },
       },
       {
         headerName: "Couple_singlechild_fee",
-        field: "Maximum",
+        field: "Couple_singlechild_fee",
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.planDeductible}</span>
+              <span>{params.data.Couple_singlechild_fee}</span>
             </div>
           );
         },
       },
       {
         headerName: "Couple_withChildren_fee",
-        field: "preexCoverage",
+        field: "Couple_withChildren_fee",
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data?.preexCoverage}</span>
+              <span>{params.data?.Couple_withChildren_fee}</span>
             </div>
           );
         },
       },
       {
         headerName: "parent_with_child",
-        field: "preexDeductible",
+        field: "parent_with_child",
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.preexDeductible}</span>
+              <span>{params.data.parent_with_child}</span>
             </div>
           );
         },
       },
       {
         headerName: "parent_with_children",
-        field: "preexMaxCoverage",
+        field: "parent_with_children",
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.preexMaxCoverage}</span>
+              <span>{params.data.parent_with_children}</span>
             </div>
           );
         },
@@ -208,7 +207,7 @@ class ListPlanPrice extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.CoverageCntry}</span>
+              <span>{params.data?.policy_ID_fk?._id}</span>
             </div>
           );
         },
@@ -358,12 +357,12 @@ class ListPlanPrice extends React.Component {
   }
 
   getOptionDataList = () => {
-    axiosConfig.get(`/plan/view-plan`).then((response) => {
-      console.log(response.data.Plan);
-      const updatedPlanList = response.data.Plan?.filter(
-        (st) => st.status === "true"
-      );
-      this.setState({ rowData: updatedPlanList });
+    axiosConfig.get(`/plan-price/view-plan-price`).then((response) => {
+      console.log(response.data.PlanPrice);
+      // const updatedPlanList = response.data.Plan?.filter(
+      //   (st) => st.status === "true"
+      // );
+      this.setState({ rowData: response.data.PlanPrice });
     });
   };
   runthisfunction(id) {
@@ -425,7 +424,7 @@ class ListPlanPrice extends React.Component {
             <Row className="m-2">
               <Col>
                 <h1 sm="6" className="float-left">
-                ListPlanPrice List
+                  ListPlanPrice List
                 </h1>
               </Col>
               <Col className="pt-4">

@@ -18,34 +18,37 @@ import swal from "sweetalert";
 import { Route } from "react-router-dom";
 import Multiselect from "multiselect-react-dropdown";
 
-const ageList =[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99]
+const ageList = [
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+  23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41,
+  42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+  61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
+  80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98,
+  99,
+];
 export default class AddPlan extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        ageMin:"",
-        ageMax:"",
-        dependentPrice:"",
-        canSupportCouple:"",
-        canSupportChild:"",
-      planMinDays: "",
-      planType: [],
-      agesupportMin: null,
-      agesupportMax: null,
-      planMaximum: "",
-      planDeductible: "",
-      preexCoverage: "",
-      preexDeductible: "",
-      preexMaxCoverage: null,
-      CoverageCntry: "",
+      ageMin: "",
+      ageMax: "",
+      dependentPrice: "",
+      canSupportCouple: "",
+      canSupportChild: "",
+      individualFee: "",
+      couple_singlechild_fee: "",
+      couple_withChildren_fee: "",
+      parent_with_children: "",
+      parent_with_child: "",
+      plantypeList: [],
       policy_combination_active: "",
       selectedValue: "",
-      list: [{ name: "BASIC" }, { name: "PRE-EX" }],
+      planType: "",
       planBenefitsCode_fk: "",
       policy_ID_fk: "",
       planBenefitsList: [],
       policyList: [],
-      age:[],
+      age: [],
       error: "",
     };
     this.onSelect = this.onSelect.bind(this);
@@ -55,28 +58,45 @@ export default class AddPlan extends Component {
     this.setState({ status: e.target.value });
   };
   componentDidMount() {
-    // this.PlanBenefitsList();
     this.AllPolicyList();
-this.setState({age:ageList})
+    this.planTypeList();
+    this.PlanBenefitsList();
+    this.setState({ age: ageList });
   }
 
   AllPolicyList = () => {
     axiosConfig.get("/admin/get_policies").then((response) => {
-        // console.log(object)
       this.setState({ policyList: response.data.data });
+    });
+  };
+  planTypeList = () => {
+    axiosConfig
+      .get("/admin/get_plan_typ")
+      .then((response) => {
+        console.log(response.data.data);
+        this.setState({ plantypeList: response.data.data });
+      })
+      .catch((err) => {
+        swal("Something Went Wrong");
+      });
+  };
+  PlanBenefitsList = () => {
+    axiosConfig.get("/benefite/view-benefite").then((response) => {
+      console.log(response.data.Benefite);
+      this.setState({ planBenefitsList: response.data.Benefite });
     });
   };
   changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
   onSelect(selectedList, selectedItem) {
-    console.log(selectedList.length);
+    console.log(selectedItem.plan_type);
     this.setState({ planType: selectedList });
     // this.setState({ error: selectedList });
   }
   handlePlanBenefits = (e) => {
     const { name, value } = e.target;
-    console.log(value);
+    console.log(name, value);
     this.setState({ [name]: value });
   };
   onRemove(selectedList, removedItem) {
@@ -87,40 +107,38 @@ this.setState({age:ageList})
   submitHandler = (e) => {
     e.preventDefault();
     console.log(this.state.error);
-  
-
     const payload = {
-      planMinDays: this.state.planMinDays,
-      planType: this.state.planType,
-      agesupportMin: this.state.agesupportMin,
-      agesupportMax: this.state.agesupportMax,
-      planMaximum: this.state.planMaximum,
-      planDeductible: this.state.planDeductible,
-      preexCoverage: this.state.preexCoverage,
-      preexMaxCoverage: this.state.preexMaxCoverage,
-      CoverageCntry: this.state.CoverageCntry,
-      planBenefitsCode_fk: this.state.planBenefitsCode_fk,
-      preexDeductible: this.state.preexDeductible,
-      // policy_combination_active: this.state.preexCoverage,
+      // planPriceID: "PP001",
+      ageMin: this.state.ageMin,
+      ageMax: this.state.ageMax,
+      dependentPrice: this.state.dependentPrice,
+      cansupportCouple: this.state.canSupportCouple,
+      cansupportChild: this.state.canSupportChild,
+      IndividualFee: this.state.individualFee,
+      Couple_singlechild_fee: this.state.couple_singlechild_fee,
+      Couple_withChildren_fee: this.state.couple_withChildren_fee,
+      parent_with_child: this.state.parent_with_child,
+      parent_with_children: this.state.parent_with_child,
+      // ageRange_active: "Yes",
       policy_ID_fk: this.state.policy_ID_fk,
-      status: this.state.status,
+      planType_fk: this.state.planType,
+      // planType_fk: this.state.planBenefitsCode_fk,
+      // status: this.state.status,
     };
     console.log(payload);
 
     axiosConfig
-      .post("/plan/save-plan", payload)
+      .post("/plan-price/save-plan-price", payload)
       .then((response) => {
         swal("Success!", "Submitted SuccessFull!", "success");
-        this.props.history.push("/app/plans/PlanList");
+        this.props.history.push("/app/plan/ListPlanPrice");
       })
       .catch((error) => {
         console.log(error);
       });
-    // }
   };
 
   render() {
-   
     return (
       <div>
         <Row>
@@ -142,7 +160,7 @@ this.setState({age:ageList})
           <Row className="m-2">
             <Col>
               <h1 col-sm-6 className="float-left">
-              AddPlanPrice
+                AddPlanPrice
               </h1>
             </Col>
             <Col>
@@ -176,8 +194,10 @@ this.setState({age:ageList})
                       <option disabled value="">
                         Select Age
                       </option>
-                    {this.state.age?.map((ele)=> <option value={ele}>{ele}</option> )}
-                   </Input>
+                      {this.state.age?.map((ele) => (
+                        <option value={ele}>{ele}</option>
+                      ))}
+                    </Input>
                   </FormGroup>
                 </Col>
                 <Col lg="6" md="6" sm="12" className="">
@@ -195,41 +215,20 @@ this.setState({age:ageList})
                       <option disabled value="">
                         Select Age
                       </option>
-                    {this.state.age?.map((ele)=> <option value={ele}>{ele}</option> )}
-                   </Input>
-                  </FormGroup>
-                </Col>
-                {/* <Col lg="6" md="6" sm="12" className="">
-                  <Label for="data-category">PlanMinDays</Label>
-                  <FormGroup>
-                    <Input
-                      type="select"
-                      required
-                      id="data-category"
-                      name="planMinDays"
-                      value={this.state.planMinDays}
-                      onChange={this.handlePlanBenefits}
-                      defaultValue=""
-                    >
-                      <option disabled value="">
-                        Select PlanMinDays
-                      </option>
-                      <option value="5">5</option>
-                      <option value="15">15</option>
-                      <option value="30">30</option>
-                      <option value="60">60</option>
-                      <option value="90">90</option>
+                      {this.state.age?.map((ele) => (
+                        <option value={ele}>{ele}</option>
+                      ))}
                     </Input>
                   </FormGroup>
-                </Col> */}
+                </Col>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label>DependentPrice</Label>
                   <Input
                     required
                     type="number"
-                    name="agesupportMin"
+                    name="dependentPrice"
                     placeholder="DependentPrice"
-                    value={this.state.agesupportMin}
+                    value={this.state.dependentPrice}
                     onChange={this.changeHandler}
                   ></Input>
                 </Col>
@@ -238,9 +237,9 @@ this.setState({age:ageList})
                   <Input
                     required
                     type="number"
-                    name="agesupportMin"
+                    name="canSupportCouple"
                     placeholder="cansupportCouple"
-                    value={this.state.agesupportMin}
+                    value={this.state.canSupportCouple}
                     onChange={this.changeHandler}
                   ></Input>
                 </Col>
@@ -249,31 +248,31 @@ this.setState({age:ageList})
                   <Input
                     required
                     type="number"
-                    name="agesupportMin"
-                    placeholder="cansupportChild"
-                    value={this.state.agesupportMin}
+                    name="canSupportChild"
+                    placeholder="CanSupportChild"
+                    value={this.state.canSupportChild}
                     onChange={this.changeHandler}
                   ></Input>
                 </Col>
-                {/* <Col lg="6" md="6" sm="6" className="mb-2">
+                <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label>IndividualFee</Label>
                   <Input
                     required
                     type="number"
-                    name="agesupportMin"
+                    name="individualFee"
                     placeholder="IndividualFee"
-                    value={this.state.agesupportMin}
+                    value={this.state.individualFee}
                     onChange={this.changeHandler}
                   ></Input>
-                </Col> */}
+                </Col>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label>Couple_singlechild_fee</Label>
                   <Input
                     required
                     type="number"
-                    name="Couple_singlechild_fee"
-                    placeholder="Couple_singlechild_fee"
-                    value={this.state.Couple_singlechild_fee}
+                    name="couple_singlechild_fee"
+                    placeholder="couple_singlechild_fee"
+                    value={this.state.couple_singlechild_fee}
                     onChange={this.changeHandler}
                   ></Input>
                 </Col>
@@ -282,9 +281,9 @@ this.setState({age:ageList})
                   <Input
                     required
                     type="number"
-                    name="Couple_withChildren_fee"
-                    placeholder="Couple_withChildren_fee"
-                    value={this.state.Couple_withChildren_fee}
+                    name="couple_withChildren_fee"
+                    placeholder="couple_withChildren_fee"
+                    value={this.state.couple_withChildren_fee}
                     onChange={this.changeHandler}
                   ></Input>
                 </Col>
@@ -333,179 +332,47 @@ this.setState({age:ageList})
                     </Input>
                   </FormGroup>
                 </Col>
-                <Col className="" lg="6" md="6" sm="12">
-                  <Label for="data-category">Plan Type</Label>
-                  <Multiselect
-                    options={this.state.list}
-                    selectedValues={this.state.selectedValue}
-                    onSelect={this.onSelect}
-                    onRemove={this.onRemove}
-                    displayValue="name"
-                  />
-                  <span style={{ color: "red" }}>{this.state.error}</span>
-                </Col>
-                <Col lg="6" md="6" sm="6" className="mb-2">
-                  <Label>AgesupportMin</Label>
-                  <Input
-                    required
-                    type="number"
-                    name="agesupportMin"
-                    placeholder="AgesupportMin"
-                    value={this.state.agesupportMin}
-                    onChange={this.changeHandler}
-                  ></Input>
-                </Col>
-                <Col lg="6" md="6" sm="6" className="mb-2">
-                  <Label>AgesupportMax</Label>
-                  <Input
-                    required
-                    type="number"
-                    name="agesupportMax"
-                    placeholder="AgesupportMax"
-                    value={this.state.agesupportMax}
-                    onChange={this.changeHandler}
-                  ></Input>
-                </Col>
-                <Col lg="6" md="6" sm="6" className="mb-2">
-                  <Label>planMaximum</Label>
-                  <Input
-                    required
-                    type="number"
-                    name="planMaximum"
-                    placeholder="planMaximum"
-                    value={this.state.planMaximum}
-                    onChange={this.changeHandler}
-                  ></Input>
-                </Col>
-
                 <Col lg="6" md="6" sm="12" className="">
-                  <Label for="data-category">PlanDeductible</Label>
+                  <Label for="data-category">Plan Type</Label>
                   <FormGroup>
                     <Input
                       type="select"
-                      id="data-category"
                       required
-                      name="planDeductible"
-                      value={this.state.planDeductible}
+                      id="data-category"
+                      name="planType"
+                      value={this.state.planType}
                       onChange={this.handlePlanBenefits}
                       defaultValue=""
                     >
                       <option disabled value="">
-                        Select planDeductible
+                        Select Plan Type
                       </option>
-                      <option value="0">0</option>
-                      <option value="50">50</option>
-                      <option value="75">75</option>
-                      <option value="100">100</option>
-                      <option value="250">250</option>
-                      <option value="500">500</option>
-                      <option value="1000">1000</option>
-                      <option value="2500">2500</option>
-                      <option value="5000">5000</option>
-                      <option value="10000">10000</option>
+                      {this.state.plantypeList?.map((ele) => (
+                        <option value={ele._id}>{ele.plan_type}</option>
+                      ))}
                     </Input>
                   </FormGroup>
                 </Col>
-
                 <Col lg="6" md="6" sm="12" className="">
-                  <Label for="data-category">PreexCoverage</Label>
+                  <Label for="data-category">Plan Benefits</Label>
                   <FormGroup>
                     <Input
                       type="select"
-                      id="data-category"
                       required
-                      name="preexCoverage"
-                      value={this.state.preexCoverage}
-                      onChange={this.handlePlanBenefits}
-                      defaultValue=""
-                    >
-                      <option value="" disabled>
-                        Select PreexCoverage
-                      </option>
-                      <option value="NO">NO</option>
-                      <option value="YES">YES</option>
-                      <option value="ACUTE">ACUTE</option>
-                    </Input>
-                  </FormGroup>
-                </Col>
-
-               
-                <Col lg="6" md="6" sm="12" className="">
-                  <Label for="data-category">PlanBenefits </Label>
-                  <FormGroup>
-                    <Input
-                      type="select"
                       id="data-category"
-                      required
                       name="planBenefitsCode_fk"
                       value={this.state.planBenefitsCode_fk}
                       onChange={this.handlePlanBenefits}
                       defaultValue=""
                     >
                       <option disabled value="">
-                        Select PlanBenefit
+                        Select planBenefitsCode_fk
                       </option>
-                      {this.state.planBenefitsList?.map((val) => {
-                        return (
-                          <option value={val?._id}>
-                            {val?.planBenefitsCode}
-                          </option>
-                        );
-                      })}
+                      {this.state.plantypeList?.map((ele) => (
+                        <option value={ele._id}>{ele.plan_type}</option>
+                      ))}
                     </Input>
                   </FormGroup>
-                </Col>
-                <Col lg="6" md="6" sm="12" className="">
-                  <Label for="data-category">PreexDeductible</Label>
-                  <FormGroup>
-                    <Input
-                      type="select"
-                      id="data-category"
-                      required
-                      name="preexDeductible"
-                      value={this.state.preexDeductible}
-                      onChange={this.handlePlanBenefits}
-                      defaultValue=""
-                    >
-                      <option disabled value="">
-                        Select PreexDeductible
-                      </option>
-                      <option value="0">0</option>
-                      <option value="75">75</option>
-                      <option value="100">100</option>
-                      <option value="250">250</option>
-                      <option value="500">500</option>
-                      <option value="750">750</option>
-                      <option value="1000">1000</option>
-                      <option value="1500">1500</option>
-                      <option value="2000">2000</option>
-                      <option value="2500">2500</option>
-                      <option value="5000">5000</option>
-                      <option value="10000">10000</option>
-                    </Input>
-                  </FormGroup>
-                </Col>
-                <Col lg="6" md="6" sm="6" className="mb-2">
-                  <Label>PreexMaxCoverage</Label>
-                  <Input
-                    required
-                    type="number"
-                    name="preexMaxCoverage"
-                    placeholder="preexMaxCoverage"
-                    value={this.state.preexMaxCoverage}
-                    onChange={this.changeHandler}
-                  ></Input>
-                </Col>
-                <Col lg="6" md="6" sm="6" className="mb-2">
-                  <Label>CoverageCntry</Label>
-                  <Input
-                    required
-                    type="number"
-                    name="CoverageCntry"
-                    placeholder="CoverageCntry"
-                    value={this.state.CoverageCntry}
-                    onChange={this.changeHandler}
-                  ></Input>
                 </Col>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label className="mb-1">Status</Label>

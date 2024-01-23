@@ -107,12 +107,14 @@ class PlanList extends React.Component {
 
       {
         headerName: "planType",
-        field: "Insurgeon",
+        field: "planType",
         filter: true,
         width: 200,
         valueFormatter: (params) => {
-          if (params?.data.planType) {
-            return params.data.planType?.map((ele) => ele?.name).join(", ");
+          if (params?.data?.planType) {
+            return params.data.planType
+              ?.map((ele) => ele?.plan_type)
+              .join(", ");
           }
           return null;
         },
@@ -299,11 +301,11 @@ class PlanList extends React.Component {
 
   getOptionDataList = () => {
     axiosConfig.get(`/plan/view-plan`).then((response) => {
-      console.log(response.data.Plan);
       const updatedPlanList = response.data.Plan?.filter(
         (st) => st.status === "true"
       );
       this.setState({ rowData: updatedPlanList });
+      console.log(updatedPlanList);
     });
   };
   runthisfunction(id) {
