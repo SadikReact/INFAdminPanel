@@ -165,7 +165,9 @@ class PolicyList extends React.Component {
         width: 200,
         cellRendererFramework: (params) => {
           return (
-            <div className="">{ReactHtmlParser(params?.data?.policyDesc)}</div>
+            <div className=" mt-1">
+              {ReactHtmlParser(params?.data?.policyDesc)}
+            </div>
           );
         },
       },
@@ -176,7 +178,9 @@ class PolicyList extends React.Component {
         width: 200,
         cellRendererFramework: (params) => {
           return (
-            <div className="">{ReactHtmlParser(params?.data?.paraDesc)}</div>
+            <div className=" mt-1">
+              {ReactHtmlParser(params?.data?.paraDesc)}
+            </div>
           );
         },
       },

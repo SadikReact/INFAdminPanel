@@ -34,7 +34,8 @@ export default class AddPlan extends Component {
       CoverageCntry: "",
       policy_combination_active: "",
       selectedValue: "",
-      list: [{ name: "BASIC" }, { name: "PRE-EX" }],
+      // list: [{ name: "BASIC" }, { name: "PRE-EX" }],
+      list: [],
       planBenefitsCode_fk: "",
       policy_ID_fk: "",
       planBenefitsList: [],
@@ -50,8 +51,19 @@ export default class AddPlan extends Component {
   componentDidMount() {
     this.PlanBenefitsList();
     this.AllPolicyList();
+    this.planTypeList();
   }
-
+  planTypeList = () => {
+    axiosConfig
+      .get("/admin/get_plan_typ")
+      .then((response) => {
+        console.log(response.data.data);
+        this.setState({ list: response.data.data });
+      })
+      .catch((err) => {
+        swal("Something Went Wrong");
+      });
+  };
   PlanBenefitsList = () => {
     axiosConfig.get("/benefite/view-benefite").then((response) => {
       this.setState({ planBenefitsList: response.data.Benefite });
@@ -68,7 +80,6 @@ export default class AddPlan extends Component {
   onSelect(selectedList, selectedItem) {
     console.log(selectedList.length);
     this.setState({ planType: selectedList });
-    // this.setState({ error: selectedList });
   }
   handlePlanBenefits = (e) => {
     const { name, value } = e.target;
@@ -83,12 +94,6 @@ export default class AddPlan extends Component {
   submitHandler = (e) => {
     e.preventDefault();
     console.log(this.state.error);
-    // if (this.state.error <= 0) {
-    //   this.setState({ error: "Please select at least one option." });
-    //   swal("Error!", "Select Plan Type", "error");
-    // } else {
-    // Perform your form submission logic here
-
     const payload = {
       planMinDays: this.state.planMinDays,
       planType: this.state.planType,
@@ -190,7 +195,7 @@ export default class AddPlan extends Component {
                     selectedValues={this.state.selectedValue}
                     onSelect={this.onSelect}
                     onRemove={this.onRemove}
-                    displayValue="name"
+                    displayValue="plan_type"
                   />
                   <span style={{ color: "red" }}>{this.state.error}</span>
                 </Col>
