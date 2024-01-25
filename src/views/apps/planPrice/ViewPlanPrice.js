@@ -26,7 +26,7 @@ const ageList = [
   80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98,
   99,
 ];
-export default class AddPlan extends Component {
+export default class ViewPlanPrice extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -62,7 +62,21 @@ export default class AddPlan extends Component {
     this.AllPolicyList();
     this.getPlanList();
     this.setState({ age: ageList });
+    const { id } = this.props.match.params;
+    console.log(id);
+    this.viewList(id);
   }
+  viewList = (id) => {
+    axiosConfig
+      .get(`/plan-price/view-plan-price-by-id/${id}`)
+      .then((response) => {
+        // this.setState({ plantypeList: response.data.Plan });
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   getPlanList = () => {
     axiosConfig.get(`/plan/view-plan`).then((response) => {
       // const updatedPlanList = response.data.Plan?.filter(
@@ -77,35 +91,13 @@ export default class AddPlan extends Component {
       this.setState({ policyList: response.data.data });
     });
   };
-  // planTypeList = () => {
-  //   axiosConfig
-  //     .get("/admin/get_plan_typ")
-  //     .then((response) => {
-  //       console.log(response.data.data);
-  //       this.setState({ plantypeList: response.data.data });
-  //     })
-  //     .catch((err) => {
-  //       swal("Something Went Wrong");
-  //     });
-  // };
-  // PlanBenefitsList = () => {
-  //   axiosConfig
-  //     .get("/benefite/view-benefite")
-  //     .then((response) => {
-  //       console.log(response.data.Benefite);
-  //       this.setState({ planBenefitsList: response.data.Benefite });
-  //     })
-  //     .catch((err) => {
-  //       swal("Something Went Wrong");
-  //     });
-  // };
+
   changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
   onSelect(selectedList, selectedItem) {
     console.log(selectedItem.plan_type);
     this.setState({ planType: selectedList });
-    // this.setState({ error: selectedList });
   }
   handlePlanBenefits = (e) => {
     const { name, value } = e.target;
@@ -121,7 +113,6 @@ export default class AddPlan extends Component {
     e.preventDefault();
     console.log(this.state.error);
     const payload = {
-      // planPriceID: "PP001",
       ageMin: this.state.ageMin,
       ageMax: this.state.ageMax,
       dependentPrice: this.state.dependentPrice,
@@ -134,20 +125,18 @@ export default class AddPlan extends Component {
       parent_with_children: this.state.parent_with_child,
       policy_ID_fk: this.state.policy_ID_fk,
       planType_fk: this.state.planType,
-      // planType_fk: this.state.planBenefitsCode_fk,
-      // status: this.state.status,
     };
     console.log(payload);
 
-    axiosConfig
-      .post("/plan-price/save-plan-price", payload)
-      .then((response) => {
-        swal("Success!", "Submitted SuccessFull!", "success");
-        this.props.history.push("/app/plan/ListPlanPrice");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // axiosConfig
+    //   .post("/plan-price/save-plan-price", payload)
+    //   .then((response) => {
+    //     swal("Success!", "Submitted SuccessFull!", "success");
+    //     this.props.history.push("/app/plan/ListPlanPrice");
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
   render() {
@@ -161,9 +150,9 @@ export default class AddPlan extends Component {
                   Home
                 </BreadcrumbItem>
                 <BreadcrumbItem href="" tag="a">
-                  AddPlanPrice List
+                  Add PlanPrice List
                 </BreadcrumbItem>
-                <BreadcrumbItem active>Add Plan</BreadcrumbItem>
+                <BreadcrumbItem active>View PlanPrice</BreadcrumbItem>
               </Breadcrumb>
             </div>
           </Col>
@@ -172,7 +161,7 @@ export default class AddPlan extends Component {
           <Row className="m-2">
             <Col>
               <h1 col-sm-6 className="float-left">
-                AddPlanPrice
+                View PlanPrice
               </h1>
             </Col>
             <Col>

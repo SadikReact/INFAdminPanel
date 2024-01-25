@@ -301,11 +301,11 @@ class PlanList extends React.Component {
 
   getOptionDataList = () => {
     axiosConfig.get(`/plan/view-plan`).then((response) => {
-      const updatedPlanList = response.data.Plan?.filter(
-        (st) => st.status === "true"
-      );
-      this.setState({ rowData: updatedPlanList });
-      console.log(updatedPlanList);
+      // const updatedPlanList = response.data.Plan?.filter(
+      //   (st) => st.status === "true"
+      // );
+      this.setState({ rowData: response.data.Plan });
+      console.log(response.data.Plan);
     });
   };
   runthisfunction(id) {

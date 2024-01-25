@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   Card,
   CardBody,
@@ -8,20 +8,24 @@ import {
   Label,
   Input,
   Button,
+  Breadcrumb,
+  BreadcrumbItem,
 } from "reactstrap";
-// import swal from "sweetalert";
-import { Route } from "react-router-dom";
-import axiosConfig from "../../../axiosConfig";
-import { EditorState, convertToRaw } from "draft-js";
+import ReactHtmlParser from "react-html-parser";
+import {
+  ContentState,
+  EditorState,
+  convertFromHTML,
+  convertToRaw,
+} from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
+import { Route } from "react-router-dom";
+import axiosConfig from "../../../../axiosConfig";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import "../../../assets/scss/plugins/extensions/editor.scss";
-
-import Breadcrumbs from "../../../components/@vuexy/breadCrumbs/BreadCrumb";
+import "../../../../assets/scss/plugins/extensions/editor.scss";
 import swal from "sweetalert";
-import ReactHtmlParser from "react-html-parser";
-class AddPolicy extends React.Component {
+export default class EditPolicy extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -43,11 +47,79 @@ class AddPolicy extends React.Component {
       renewed: "",
       policyActive: "",
       policyTypeList: [],
+      editorState: EditorState.createEmpty(),
     };
+  }
+  componentDidMount() {
+    let { id } = this.props.match.params;
+
+    axiosConfig
+      .get("/admin/get_pt")
+      .then((response) => {
+        this.setState({ policyTypeList: response.data.data });
+      })
+      .catch((err) => {
+        swal("Something Went Wrong");
+      });
+    axiosConfig
+      .get(`/admin/getOnePolicy/${id}`)
+      .then((response) => {
+        console.log(response.data?.data?.policyType.pt_type);
+        console.log(response.data?.data?.policyType._id);
+        const {
+          paraDesc,
+          brochureLink,
+          policyAdtional,
+          policyDesc,
+          policyDocument,
+          policyFAQ,
+          policyName,
+          policyPage,
+          policyType,
+          policyUnderWriter,
+          purchesLink,
+          renewed,
+          status,
+          purched,
+          policyNum,
+          proproetary,
+        } = response?.data?.data;
+
+        const contentState = ContentState.createFromBlockArray(
+          convertFromHTML(paraDesc)
+        );
+        const contentState1 = ContentState.createFromBlockArray(
+          convertFromHTML(policyDesc)
+        );
+        const editorState = EditorState.createWithContent(contentState);
+        const editorState1 = EditorState.createWithContent(contentState1);
+        this.setState({
+          policyName: policyName,
+          policyNumber: policyNum,
+          policyUnderWriter: policyUnderWriter,
+          proprietary: proproetary,
+          policyType: policyType?._id,
+          policyAdditionalFeatures: policyAdtional,
+          policyDescription: policyDesc,
+          paraDescription: paraDesc,
+          policy_page: policyPage,
+          policy_document: policyDocument,
+          policy_FAQ: policyFAQ,
+          purchase_link: purchesLink,
+          brochure_link: brochureLink,
+          purchased: purched,
+          renewed: renewed,
+          policyActive: status,
+          editorState: editorState,
+          editorState1: editorState1,
+        });
+      })
+      .catch((error) => {
+        swal("Something Went Wrong");
+      });
   }
 
   onEditorStateChangePara = (editorState) => {
-    console.log("para", editorState);
     this.setState({
       editorState,
       paraDescription: draftToHtml(
@@ -63,35 +135,17 @@ class AddPolicy extends React.Component {
       ),
     });
   };
-  componentDidMount() {
-    axiosConfig
-      .get("/admin/get_pt")
-      .then((response) => {
-        console.log(response.data.data);
-
-        this.setState({ policyTypeList: response.data.data });
-        console.log(response.data.data);
-      })
-      .catch((err) => {
-        swal("Something Went Wrong");
-      });
-  }
-  changeHandler1 = (e) => {
-    this.setState({ policyActive: e.target.value });
+  handleImage = (e) => {
+    this.setState({ plan_image: e.target.files[0] });
+  };
+  handlePolicyType = (e) => {
+    console.log(e.target.value);
+    this.setState({ policyType: e.target.value });
   };
   changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  handlePolicyType = (e) => {
-    this.setState({ policyType: e.target.value });
-  };
-  handleImage = (e) => {
-    // const { files,value,name} = e.target;
-    this.setState({ [e.target.name]: e.target.files[0] });
-  };
   submitHandler = (e) => {
-    e.preventDefault();
-    const adminId = localStorage.getItem("userId");
     const formdata = new FormData();
     formdata.append("policyName", this.state.policyName);
     formdata.append("policyNum", this.state.policyNumber);
@@ -112,32 +166,40 @@ class AddPolicy extends React.Component {
       formdata.append("planimg", this.state.plan_image);
     }
     formdata.append("status", this.state.policyActive);
-    // formdata.append("status", true);
+    e.preventDefault();
+    let { id } = this.props.match.params;
+    console.log(this.state.policyType);
     axiosConfig
-      .post(`/admin/add_policy/${adminId}`, formdata)
+      .post(`/admin/editPolicy/${id}`, formdata)
       .then((response) => {
-        console.log(response);
         swal("Success!", "Submitted SuccessFull!", "success");
         this.props.history.push("/app/policy/PolicyList");
       })
       .catch((error) => {
-        console.log(error);
+        swal("Something Went Wrong");
       });
   };
 
   render() {
     return (
       <div>
-        <Breadcrumbs
-          breadCrumbTitle=" Add Policy"
-          breadCrumbParent="Home"
-          breadCrumbActive=" Add Policy"
-        />
+        <Row>
+          <Col sm="12">
+            <div>
+              <Breadcrumb listTag="div">
+                <BreadcrumbItem href="/" tag="a">
+                  Home
+                </BreadcrumbItem>
+                <BreadcrumbItem active>Edit Policy</BreadcrumbItem>
+              </Breadcrumb>
+            </div>
+          </Col>
+        </Row>
         <Card>
           <Row className="m-2">
             <Col>
               <h1 col-sm-6 className="float-left">
-                Add Policy
+                Edit Policy
               </h1>
             </Col>
             <Col>
@@ -175,7 +237,7 @@ class AddPolicy extends React.Component {
                     value={this.state.policyNumber}
                     onChange={this.changeHandler}
                   />
-                </Col>{" "}
+                </Col>
                 <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>policyUnderWriter </Label>
                   <Input
@@ -215,7 +277,7 @@ class AddPolicy extends React.Component {
                     value={this.state.policy_page}
                     onChange={this.changeHandler}
                   />
-                </Col>
+                </Col>{" "}
                 <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>Policy Document </Label>
                   <Input
@@ -248,18 +310,12 @@ class AddPolicy extends React.Component {
                 </Col>
                 <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>Brochure Link </Label>
-                  {/* <Input
+                  <Input
                     type="text"
                     name="brochure_link"
                     placeholder="Brochure Link"
                     value={this.state.brochure_link}
                     onChange={this.changeHandler}
-                  /> */}
-                  <Input
-                    type="file"
-                    name="brochure_link"
-                    accept="application/pdf"
-                    onChange={this.handleImage}
                   />
                 </Col>
                 <Col lg="6" md="6" sm="12" className="mb-2">
@@ -273,39 +329,21 @@ class AddPolicy extends React.Component {
                   />
                 </Col>
                 <Col lg="6" md="6" sm="12" className="mb-2">
-                  <Label>Renewed </Label>
-                  <Input
-                    type="text"
-                    name="renewed"
-                    placeholder="renewed"
-                    value={this.state.renewed}
-                    onChange={this.changeHandler}
-                  />
-                </Col>
-                <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label for="data-category">Policy Type</Label>
                   <Input
                     type="select"
                     id="data-category"
+                    name="policyType"
                     value={this.state.policyType}
                     onChange={this.handlePolicyType}
+                    defaultValue={this.state.policyType}
                   >
-                    <option value="">Select PolicyType</option>
                     {this.state.policyTypeList?.map((itm) => (
                       <option key={itm._id} value={itm._id}>
                         {itm.pt_type}
                       </option>
                     ))}
                   </Input>
-                </Col>
-                <Col lg="6" md="6" sm="12" className="mb-2">
-                  <Label>Plan Image </Label>
-                  <Input
-                    type="file"
-                    name="plan_image"
-                    // accept="application/pdf"
-                    onChange={this.handleImage}
-                  />
                 </Col>
                 <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>Policy Descripition</Label>
@@ -393,7 +431,15 @@ class AddPolicy extends React.Component {
                     }}
                   />
                 </Col>
-                {/* <Col lg="6" md="6" sm="6" className="mb-2">
+                <Col lg="6" md="6" sm="12" className="mb-2">
+                  <Label>Plan Image </Label>
+                  <Input
+                    type="file"
+                    name="plan_image"
+                    onChange={this.handleImage}
+                  />
+                </Col>
+                <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label className="mb-1">Status</Label>
                   <div
                     className="form-label-group"
@@ -404,6 +450,7 @@ class AddPolicy extends React.Component {
                       type="radio"
                       name="status"
                       value="true"
+                      checked
                     />
                     <span style={{ marginRight: "20px" }}>Active</span>
 
@@ -415,17 +462,22 @@ class AddPolicy extends React.Component {
                     />
                     <span style={{ marginRight: "3px" }}>Inactive</span>
                   </div>
-                </Col> */}
+                </Col>
               </Row>
-
               <Row>
-                <Col lg="6" md="6" sm="6" className="mb-2">
+                <Col
+                  lg="6"
+                  md="6"
+                  sm="6"
+                  className="mb-2"
+                  style={{ marginLeft: "15px" }}
+                >
                   <Button.Ripple
                     color="primary"
                     type="submit"
                     className="mr-1 mb-1"
                   >
-                    Submit
+                    Update Policy
                   </Button.Ripple>
                 </Col>
               </Row>
@@ -436,5 +488,3 @@ class AddPolicy extends React.Component {
     );
   }
 }
-
-export default AddPolicy;

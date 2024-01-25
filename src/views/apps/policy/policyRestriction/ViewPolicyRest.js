@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable jsx-a11y/img-redundant-alt */
+import React, { Component } from "react";
 import {
   Card,
   CardBody,
@@ -8,20 +9,24 @@ import {
   Label,
   Input,
   Button,
+  Breadcrumb,
+  BreadcrumbItem,
 } from "reactstrap";
-// import swal from "sweetalert";
-import { Route } from "react-router-dom";
-import axiosConfig from "../../../axiosConfig";
-import { EditorState, convertToRaw } from "draft-js";
+import ReactHtmlParser from "react-html-parser";
+import {
+  ContentState,
+  EditorState,
+  convertFromHTML,
+  convertToRaw,
+} from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
+import { Route } from "react-router-dom";
+import axiosConfig from "../../../../axiosConfig";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import "../../../assets/scss/plugins/extensions/editor.scss";
-
-import Breadcrumbs from "../../../components/@vuexy/breadCrumbs/BreadCrumb";
+import "../../../../assets/scss/plugins/extensions/editor.scss";
 import swal from "sweetalert";
-import ReactHtmlParser from "react-html-parser";
-class AddPolicy extends React.Component {
+export default class ViewPolicy extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -43,11 +48,82 @@ class AddPolicy extends React.Component {
       renewed: "",
       policyActive: "",
       policyTypeList: [],
+      editorState: EditorState.createEmpty(),
     };
+  }
+  componentDidMount() {
+    let { id } = this.props.match.params;
+
+    axiosConfig
+      .get("/admin/get_pt")
+      .then((response) => {
+        this.setState({ policyTypeList: response.data.data });
+        console.log(response.data.data);
+      })
+      .catch((err) => {
+        swal("Something Went Wrong");
+      });
+    axiosConfig
+      .get(`/admin/getOnePolicy/${id}`)
+      .then((response) => {
+        console.log(response.data.data);
+        const {
+          paraDesc,
+          brochureLink,
+          planimg,
+          policyAdtional,
+          policyDesc,
+          policyDocument,
+          policyFAQ,
+          policyName,
+          policyPage,
+          policyType,
+          policyUnderWriter,
+          purchesLink,
+          renewed,
+          status,
+          purched,
+          policyNum,
+          proproetary,
+        } = response?.data?.data;
+
+        const contentState = ContentState.createFromBlockArray(
+          convertFromHTML(paraDesc)
+        );
+        const contentState1 = ContentState.createFromBlockArray(
+          convertFromHTML(policyDesc)
+        );
+        const editorState = EditorState.createWithContent(contentState);
+        const editorState1 = EditorState.createWithContent(contentState1);
+        console.log(policyType?.pt_type);
+        this.setState({
+          policyName: policyName,
+          policyNumber: policyNum,
+          policyUnderWriter: policyUnderWriter,
+          proprietary: proproetary,
+          policyType: policyType?.pt_type,
+          policyAdditionalFeatures: policyAdtional,
+          policyDescription: policyDesc,
+          paraDescription: paraDesc,
+          policy_page: policyPage,
+          policy_document: policyDocument,
+          policy_FAQ: policyFAQ,
+          purchase_link: purchesLink,
+          plan_image: planimg[0],
+          brochure_link: brochureLink,
+          purchased: purched,
+          renewed: renewed,
+          policyActive: status,
+          editorState: editorState,
+          editorState1: editorState1,
+        });
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
   }
 
   onEditorStateChangePara = (editorState) => {
-    console.log("para", editorState);
     this.setState({
       editorState,
       paraDescription: draftToHtml(
@@ -63,81 +139,48 @@ class AddPolicy extends React.Component {
       ),
     });
   };
-  componentDidMount() {
-    axiosConfig
-      .get("/admin/get_pt")
-      .then((response) => {
-        console.log(response.data.data);
-
-        this.setState({ policyTypeList: response.data.data });
-        console.log(response.data.data);
-      })
-      .catch((err) => {
-        swal("Something Went Wrong");
-      });
-  }
-  changeHandler1 = (e) => {
-    this.setState({ policyActive: e.target.value });
+  handlePolicyType = (e) => {
+    this.setState({ policyType: e.target.value });
   };
   changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  handlePolicyType = (e) => {
-    this.setState({ policyType: e.target.value });
-  };
-  handleImage = (e) => {
-    // const { files,value,name} = e.target;
-    this.setState({ [e.target.name]: e.target.files[0] });
-  };
   submitHandler = (e) => {
-    e.preventDefault();
-    const adminId = localStorage.getItem("userId");
-    const formdata = new FormData();
-    formdata.append("policyName", this.state.policyName);
-    formdata.append("policyNum", this.state.policyNumber);
-    formdata.append("policyDesc", this.state.policyDescription);
-    formdata.append("policyUnderWriter", this.state.policyUnderWriter);
-    formdata.append("proproetary", this.state.proprietary);
-    formdata.append("policyType", this.state.policyType);
-    formdata.append("policyAdtional", this.state.policyAdditionalFeatures);
-    formdata.append("paraDesc", this.state.paraDescription);
-    formdata.append("policyPage", this.state.policy_page);
-    formdata.append("policyDocument", this.state.policy_document);
-    formdata.append("policyFAQ", this.state.policy_FAQ);
-    formdata.append("purchesLink", this.state.purchase_link);
-    formdata.append("brochureLink", this.state.brochure_link);
-    formdata.append("purched", this.state.purchased);
-    formdata.append("renewed", this.state.renewed);
-    if (this.state.plan_image !== null) {
-      formdata.append("planimg", this.state.plan_image);
-    }
-    formdata.append("status", this.state.policyActive);
-    // formdata.append("status", true);
-    axiosConfig
-      .post(`/admin/add_policy/${adminId}`, formdata)
-      .then((response) => {
-        console.log(response);
-        swal("Success!", "Submitted SuccessFull!", "success");
-        this.props.history.push("/app/policy/PolicyList");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // const payload = {};
+    // e.preventDefault();
+    // let { id } = this.props.match.params;
+    // axiosConfig
+    //   .post(`/admin/edit_plantyp/${id}`, payload)
+    //   .then((response) => {
+    //     console.log(response);
+    //     swal("Success!", "Submitted SuccessFull!", "success");
+    //     this.props.history.push(`/app/policy/PolicyTypeList`);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.response);
+    //   });
   };
 
   render() {
     return (
       <div>
-        <Breadcrumbs
-          breadCrumbTitle=" Add Policy"
-          breadCrumbParent="Home"
-          breadCrumbActive=" Add Policy"
-        />
+        <Row>
+          <Col sm="12">
+            <div>
+              <Breadcrumb listTag="div">
+                <BreadcrumbItem href="/" tag="a">
+                  Home
+                </BreadcrumbItem>
+                <BreadcrumbItem active>View Policy</BreadcrumbItem>
+              </Breadcrumb>
+            </div>
+          </Col>
+        </Row>
         <Card>
           <Row className="m-2">
             <Col>
               <h1 col-sm-6 className="float-left">
-                Add Policy
+                View Policy
               </h1>
             </Col>
             <Col>
@@ -159,17 +202,19 @@ class AddPolicy extends React.Component {
                 <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>PolicyName </Label>
                   <Input
+                    disabled
                     type="text"
                     name="policyName"
                     placeholder="policyName"
                     value={this.state.policyName}
                     onChange={this.changeHandler}
                   />
-                </Col>
+                </Col>{" "}
                 <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>PolicyNumber</Label>
                   <Input
                     type="text"
+                    disabled
                     name="policyNumber"
                     placeholder="PolicyNumber"
                     value={this.state.policyNumber}
@@ -180,6 +225,7 @@ class AddPolicy extends React.Component {
                   <Label>policyUnderWriter </Label>
                   <Input
                     type="text"
+                    disabled
                     name="policyUnderWriter"
                     placeholder="PolicyUnderWriter"
                     value={this.state.policyUnderWriter}
@@ -190,6 +236,7 @@ class AddPolicy extends React.Component {
                   <Label>Proprietary </Label>
                   <Input
                     type="text"
+                    disabled
                     name="proprietary"
                     placeholder="Proprietary"
                     value={this.state.proprietary}
@@ -200,6 +247,7 @@ class AddPolicy extends React.Component {
                   <Label>PolicyAdditionalFeatures </Label>
                   <Input
                     type="text"
+                    disabled
                     name="policyAdditionalFeatures"
                     placeholder="PolicyAdditionalFeatures"
                     value={this.state.policyAdditionalFeatures}
@@ -210,16 +258,18 @@ class AddPolicy extends React.Component {
                   <Label>Policy Page </Label>
                   <Input
                     type="text"
+                    disabled
                     name="policy_page"
                     placeholder="PolicyPage"
                     value={this.state.policy_page}
                     onChange={this.changeHandler}
                   />
-                </Col>
+                </Col>{" "}
                 <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>Policy Document </Label>
                   <Input
                     type="text"
+                    disabled
                     name="policy_document"
                     placeholder="Policy Document"
                     value={this.state.policy_document}
@@ -230,6 +280,7 @@ class AddPolicy extends React.Component {
                   <Label>Policy FAQ </Label>
                   <Input
                     type="text"
+                    disabled
                     name="policy_FAQ"
                     placeholder="Policy FAQ"
                     value={this.state.policy_FAQ}
@@ -240,6 +291,7 @@ class AddPolicy extends React.Component {
                   <Label>Purchase Link </Label>
                   <Input
                     type="text"
+                    disabled
                     name="purchase_link"
                     placeholder="Purchase_link"
                     value={this.state.purchase_link}
@@ -248,24 +300,20 @@ class AddPolicy extends React.Component {
                 </Col>
                 <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>Brochure Link </Label>
-                  {/* <Input
+                  <Input
                     type="text"
+                    disabled
                     name="brochure_link"
                     placeholder="Brochure Link"
                     value={this.state.brochure_link}
                     onChange={this.changeHandler}
-                  /> */}
-                  <Input
-                    type="file"
-                    name="brochure_link"
-                    accept="application/pdf"
-                    onChange={this.handleImage}
                   />
                 </Col>
                 <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>Purchased </Label>
                   <Input
                     type="text"
+                    disabled
                     name="purchased"
                     placeholder="Purchased"
                     value={this.state.purchased}
@@ -273,11 +321,12 @@ class AddPolicy extends React.Component {
                   />
                 </Col>
                 <Col lg="6" md="6" sm="12" className="mb-2">
-                  <Label>Renewed </Label>
+                  <Label>Renewed</Label>
                   <Input
                     type="text"
+                    disabled
                     name="renewed"
-                    placeholder="renewed"
+                    placeholder="Renewed"
                     value={this.state.renewed}
                     onChange={this.changeHandler}
                   />
@@ -286,11 +335,11 @@ class AddPolicy extends React.Component {
                   <Label for="data-category">Policy Type</Label>
                   <Input
                     type="select"
+                    disabled
                     id="data-category"
                     value={this.state.policyType}
                     onChange={this.handlePolicyType}
                   >
-                    <option value="">Select PolicyType</option>
                     {this.state.policyTypeList?.map((itm) => (
                       <option key={itm._id} value={itm._id}>
                         {itm.pt_type}
@@ -299,20 +348,12 @@ class AddPolicy extends React.Component {
                   </Input>
                 </Col>
                 <Col lg="6" md="6" sm="12" className="mb-2">
-                  <Label>Plan Image </Label>
-                  <Input
-                    type="file"
-                    name="plan_image"
-                    // accept="application/pdf"
-                    onChange={this.handleImage}
-                  />
-                </Col>
-                <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>Policy Descripition</Label>
                   <Editor
                     toolbarClassName="demo-toolbar-absolute"
                     wrapperClassName="demo-wrapper"
                     editorClassName="demo-editor"
+                    readOnly={true} // Make the editor read-only
                     editorState={this.state.editorState1}
                     onEditorStateChange={this.onEditorStateChangepolicy}
                     toolbar={{
@@ -353,6 +394,7 @@ class AddPolicy extends React.Component {
                 <Col lg="6" md="6" sm="12" className="mb-2">
                   <Label>Para Descripition</Label>
                   <Editor
+                    readOnly={true} // Make the editor read-only
                     toolbarClassName="demo-toolbar-absolute"
                     wrapperClassName="demo-wrapper"
                     editorClassName="demo-editor"
@@ -393,7 +435,20 @@ class AddPolicy extends React.Component {
                     }}
                   />
                 </Col>
-                {/* <Col lg="6" md="6" sm="6" className="mb-2">
+                <Col lg="6" md="6" sm="12" className="mb-2">
+                  <div>
+                    <Label>Plan Image </Label>
+                  </div>
+                  <div>
+                    <img
+                      src={this.state.plan_image}
+                      alt="Plan Image"
+                      width={200}
+                      height={200}
+                    />
+                  </div>
+                </Col>
+                <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label className="mb-1">Status</Label>
                   <div
                     className="form-label-group"
@@ -403,7 +458,8 @@ class AddPolicy extends React.Component {
                       style={{ marginRight: "3px" }}
                       type="radio"
                       name="status"
-                      value="true"
+                      value="Active"
+                      checked
                     />
                     <span style={{ marginRight: "20px" }}>Active</span>
 
@@ -411,24 +467,29 @@ class AddPolicy extends React.Component {
                       style={{ marginRight: "3px" }}
                       type="radio"
                       name="status"
-                      value="false"
+                      value="Inactive"
                     />
                     <span style={{ marginRight: "3px" }}>Inactive</span>
                   </div>
-                </Col> */}
+                </Col>
               </Row>
-
-              <Row>
-                <Col lg="6" md="6" sm="6" className="mb-2">
+              {/* <Row>
+                <Col
+                  lg="6"
+                  md="6"
+                  sm="6"
+                  className="mb-2"
+                  style={{ marginLeft: "15px" }}
+                >
                   <Button.Ripple
                     color="primary"
                     type="submit"
                     className="mr-1 mb-1"
                   >
-                    Submit
+                    Update Policy
                   </Button.Ripple>
                 </Col>
-              </Row>
+              </Row> */}
             </Form>
           </CardBody>
         </Card>
@@ -436,5 +497,3 @@ class AddPolicy extends React.Component {
     );
   }
 }
-
-export default AddPolicy;

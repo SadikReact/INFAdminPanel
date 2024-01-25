@@ -157,7 +157,15 @@ const EditAgent = lazy(() => import("./views/apps/agent/EditAgent"));
 const VisitorList = lazy(() => import("./views/apps/apply/VisitorList"));
 // policy
 const AddPlanPrice = lazy(() => import("./views/apps/planPrice/AddPlanPrice"));
-const ListPlanPrice = lazy(() => import("./views/apps/planPrice/ListPlanPrice"));
+const ListPlanPrice = lazy(() =>
+  import("./views/apps/planPrice/ListPlanPrice")
+);
+const EditPlanPrice = lazy(() =>
+  import("./views/apps/planPrice/EditPlanPrice")
+);
+const ViewPlanPrice = lazy(() =>
+  import("./views/apps/planPrice/ViewPlanPrice")
+);
 const PlanTypeList = lazy(() => import("./views/apps/plan/PlanTypeList"));
 const AddPlanType = lazy(() => import("./views/apps/plan/AddPlanType"));
 const PolicyTypeList = lazy(() =>
@@ -174,6 +182,18 @@ const PolicyList = lazy(() => import("./views/apps/policy/PolicyList"));
 const EditPolicy = lazy(() => import("./views/apps/policy/EditPolicy"));
 const ViewPolicy = lazy(() => import("./views/apps/policy/ViewPolicy"));
 
+const ListPolicyRestriction = lazy(() =>
+  import("./views/apps/policy/policyRestriction/ListPolicyRestriction")
+);
+const AddPolicyRestriction = lazy(() =>
+  import("./views/apps/policy/policyRestriction/AddPolicyRestriction")
+);
+const EditPolicyRestriction = lazy(() =>
+  import("./views/apps/policy/policyRestriction/EditPolicyRestriction")
+);
+const ViewPolicyRestriction = lazy(() =>
+  import("./views/apps/policy/policyRestriction/ViewPolicyRest")
+);
 const CashEquity = lazy(() => import("./views/apps/scripts/CashEquity"));
 const AddCashEquity = lazy(() => import("./views/apps/scripts/AddCashEqutiy"));
 const EditCash = lazy(() => import("./views/apps/scripts/EditCash"));
@@ -664,7 +684,18 @@ class AppRouter extends React.Component {
             <AppRoute path="/app/claims/ViewClaims" component={ViewClaims} />
             <AppRoute path="/app/plan/AddPlanType" component={AddPlanType} />
             <AppRoute path="/app/plan/AddplanPrice" component={AddPlanPrice} />
-            <AppRoute path="/app/plan/ListPlanPrice" component={ListPlanPrice} />
+            <AppRoute
+              path="/app/plan/ListPlanPrice"
+              component={ListPlanPrice}
+            />
+            <AppRoute
+              path="/app/plan/EditPlanPrice/:id"
+              component={EditPlanPrice}
+            />
+            <AppRoute
+              path="/app/plan/ViewPlanPrice/:id"
+              component={ViewPlanPrice}
+            />
             <AppRoute
               path="/app/plan/EditPlanType/:id"
               component={EditPlanType}
@@ -691,6 +722,22 @@ class AppRouter extends React.Component {
             <AppRoute
               path="/app/policy/ViewPolicy/:id"
               component={ViewPolicy}
+            />
+            <AppRoute
+              path="/app/policy/PolicyRestriction"
+              component={ListPolicyRestriction}
+            />
+            <AppRoute
+              path="/app/policy/AddPolicyRestriction"
+              component={AddPolicyRestriction}
+            />
+            <AppRoute
+              path="/app/policy/EditPolicyRestriction/:id"
+              component={EditPolicyRestriction}
+            />
+            <AppRoute
+              path="/app/policy/EditPolicyRestriction/:id"
+              component={ViewPolicyRestriction}
             />
             {/* AgentList */}
             <AppRoute path="/app/agent/AgentList" component={AgentList} />
