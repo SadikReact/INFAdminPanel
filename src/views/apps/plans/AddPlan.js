@@ -384,7 +384,7 @@ export default class AddPlan extends Component {
                     onChange={this.changeHandler}
                   ></Input>
                 </Col>
-                <Col lg="6" md="6" sm="6" className="mb-2">
+                {/* <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label className="mb-1">Status</Label>
                   <div
                     className="form-label-group"
@@ -394,7 +394,7 @@ export default class AddPlan extends Component {
                       style={{ marginRight: "3px" }}
                       type="radio"
                       name="status"
-                      value="true"
+                      value="Active"
                     />
                     <span style={{ marginRight: "20px" }}>Active</span>
 
@@ -406,7 +406,7 @@ export default class AddPlan extends Component {
                     />
                     <span style={{ marginRight: "3px" }}>Deactive</span>
                   </div>
-                </Col>
+                </Col> */}
               </Row>
               <Row>
                 <Col lg="6" md="6" sm="6" className="mb-2">

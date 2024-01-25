@@ -50,6 +50,7 @@ export default class AddPlan extends Component {
       policyList: [],
       age: [],
       error: "",
+      planList: [],
     };
     this.onSelect = this.onSelect.bind(this);
     this.onRemove = this.onRemove.bind(this);
@@ -59,33 +60,45 @@ export default class AddPlan extends Component {
   };
   componentDidMount() {
     this.AllPolicyList();
-    this.planTypeList();
-    this.PlanBenefitsList();
+    this.getPlanList();
     this.setState({ age: ageList });
   }
-
+  getPlanList = () => {
+    axiosConfig.get(`/plan/view-plan`).then((response) => {
+      // const updatedPlanList = response.data.Plan?.filter(
+      //   (st) => st.status === "true"
+      // );
+      this.setState({ plantypeList: response.data.Plan });
+      console.log(response.data.Plan);
+    });
+  };
   AllPolicyList = () => {
     axiosConfig.get("/admin/get_policies").then((response) => {
       this.setState({ policyList: response.data.data });
     });
   };
-  planTypeList = () => {
-    axiosConfig
-      .get("/admin/get_plan_typ")
-      .then((response) => {
-        console.log(response.data.data);
-        this.setState({ plantypeList: response.data.data });
-      })
-      .catch((err) => {
-        swal("Something Went Wrong");
-      });
-  };
-  PlanBenefitsList = () => {
-    axiosConfig.get("/benefite/view-benefite").then((response) => {
-      console.log(response.data.Benefite);
-      this.setState({ planBenefitsList: response.data.Benefite });
-    });
-  };
+  // planTypeList = () => {
+  //   axiosConfig
+  //     .get("/admin/get_plan_typ")
+  //     .then((response) => {
+  //       console.log(response.data.data);
+  //       this.setState({ plantypeList: response.data.data });
+  //     })
+  //     .catch((err) => {
+  //       swal("Something Went Wrong");
+  //     });
+  // };
+  // PlanBenefitsList = () => {
+  //   axiosConfig
+  //     .get("/benefite/view-benefite")
+  //     .then((response) => {
+  //       console.log(response.data.Benefite);
+  //       this.setState({ planBenefitsList: response.data.Benefite });
+  //     })
+  //     .catch((err) => {
+  //       swal("Something Went Wrong");
+  //     });
+  // };
   changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -114,12 +127,11 @@ export default class AddPlan extends Component {
       dependentPrice: this.state.dependentPrice,
       cansupportCouple: this.state.canSupportCouple,
       cansupportChild: this.state.canSupportChild,
-      IndividualFee: this.state.individualFee,
+      IndividualFee: Number(this.state.individualFee) + Number(15),
       Couple_singlechild_fee: this.state.couple_singlechild_fee,
       Couple_withChildren_fee: this.state.couple_withChildren_fee,
       parent_with_child: this.state.parent_with_child,
       parent_with_children: this.state.parent_with_child,
-      // ageRange_active: "Yes",
       policy_ID_fk: this.state.policy_ID_fk,
       planType_fk: this.state.planType,
       // planType_fk: this.state.planBenefitsCode_fk,
@@ -168,7 +180,7 @@ export default class AddPlan extends Component {
                 render={({ history }) => (
                   <Button
                     className=" btn btn-danger float-right"
-                    onClick={() => history.push("/app/plans/PlanList")}
+                    onClick={() => history.push("/app/plan/ListPlanPrice")}
                   >
                     Back
                   </Button>
@@ -348,12 +360,14 @@ export default class AddPlan extends Component {
                         Select Plan Type
                       </option>
                       {this.state.plantypeList?.map((ele) => (
-                        <option value={ele._id}>{ele.plan_type}</option>
+                        <option value={ele._id}>
+                          {ele?.planType[0]?.plan_type}
+                        </option>
                       ))}
                     </Input>
                   </FormGroup>
                 </Col>
-                <Col lg="6" md="6" sm="12" className="">
+                {/* <Col lg="6" md="6" sm="12" className="">
                   <Label for="data-category">Plan Benefits</Label>
                   <FormGroup>
                     <Input
@@ -373,7 +387,7 @@ export default class AddPlan extends Component {
                       ))}
                     </Input>
                   </FormGroup>
-                </Col>
+                </Col> */}
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label className="mb-1">Status</Label>
                   <div

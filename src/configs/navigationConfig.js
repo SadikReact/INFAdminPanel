@@ -107,6 +107,14 @@ const navigationConfig = [
     permissions: ["admin", "editor"],
     navLink: "/app/plan/ListPlanPrice",
   },
+  {
+    id: "policyRestriction",
+    title: "Policy Restriction",
+    type: "item",
+    icon: <Icon.ArrowRight size={12} />,
+    permissions: ["admin", "editor"],
+    navLink: "/app/policy/PolicyRestriction",
+  },
 
   {
     type: "groupHeader",

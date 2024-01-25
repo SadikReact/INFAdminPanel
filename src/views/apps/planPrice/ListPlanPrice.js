@@ -14,7 +14,7 @@ import {
 import axiosConfig from "../../../axiosConfig";
 import { ContextLayout } from "../../../utility/context/Layout";
 import { AgGridReact } from "ag-grid-react";
-import { Edit, Trash2, ChevronDown } from "react-feather";
+import { Edit, Trash2, ChevronDown, Eye } from "react-feather";
 import "../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../assets/scss/pages/users.scss";
 import { Route } from "react-router-dom";
@@ -41,14 +41,18 @@ class ListPlanPrice extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              {/* <Eye
-                className="mr-50"
-                color="green"
-                size={20}
-                onClick={() =>
-                  history.push(`/app/size/viewSize/${params.data._id}`)
-                }
-              /> */}
+              <Route
+                render={({ history }) => (
+                  <Eye
+                    className="mr-50"
+                    color="green"
+                    size={20}
+                    onClick={() =>
+                      history.push(`/app/plan/ViewPlanPrice/${params.data._id}`)
+                    }
+                  />
+                )}
+              />
               <Route
                 render={({ history }) => (
                   <Edit
@@ -56,7 +60,9 @@ class ListPlanPrice extends React.Component {
                     size="25px"
                     color="blue"
                     onClick={() =>
-                      history.push(`/app/plans/editPlan/${params.data._id}`)
+                      history.push(
+                        `/app/plan/EditPlanPrice//${params.data._id}`
+                      )
                     }
                   />
                 )}
@@ -231,7 +237,7 @@ class ListPlanPrice extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data?.policy_ID_fk?.policyName}</span>
+              <span>{params.data?.planType_fk?.planType[0]?.plan_type}</span>
             </div>
           );
         },
@@ -255,7 +261,7 @@ class ListPlanPrice extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data?.planBenefitsCode_fk?._id}</span>
+              <span>{params.data?.planType_fk?.planMaximum}</span>
             </div>
           );
         },
@@ -267,7 +273,7 @@ class ListPlanPrice extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.preexDeductible}</span>
+              <span>{params.data?.planType_fk?.preexDeductible}</span>
             </div>
           );
         },
@@ -279,7 +285,7 @@ class ListPlanPrice extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.preexDeductible}</span>
+              <span>{params.data.planType_fk?.planDeductible}</span>
             </div>
           );
         },
@@ -291,7 +297,7 @@ class ListPlanPrice extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.preexDeductible}</span>
+              <span>{params.data.planType_fk?.preexCoverage}</span>
             </div>
           );
         },

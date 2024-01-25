@@ -56,7 +56,6 @@ class AddPolicy extends React.Component {
     });
   };
   onEditorStateChangepolicy = (editorState1) => {
-    console.log("policy", editorState1);
     this.setState({
       editorState1,
       policyDescription: draftToHtml(
@@ -68,6 +67,8 @@ class AddPolicy extends React.Component {
     axiosConfig
       .get("/admin/get_pt")
       .then((response) => {
+        console.log(response.data.data);
+
         this.setState({ policyTypeList: response.data.data });
         console.log(response.data.data);
       })
@@ -392,7 +393,7 @@ class AddPolicy extends React.Component {
                     }}
                   />
                 </Col>
-                <Col lg="6" md="6" sm="6" className="mb-2">
+                {/* <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label className="mb-1">Status</Label>
                   <div
                     className="form-label-group"
@@ -414,7 +415,7 @@ class AddPolicy extends React.Component {
                     />
                     <span style={{ marginRight: "3px" }}>Inactive</span>
                   </div>
-                </Col>
+                </Col> */}
               </Row>
 
               <Row>
